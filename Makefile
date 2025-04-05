@@ -1,7 +1,7 @@
 NAME = fdf
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror $(INCLUDES) -O3 # -g3 -fsanitize=address,leak,undefined
+CFLAGS = -Wall -Wextra -Werror $(INCLUDES) -g3 -fsanitize=address,leak,undefined # -O3
 
 RM = rm -f
 
@@ -12,7 +12,7 @@ MINILIBX_DIR = ./libs/mlx_linux
 MINILIBX_FLAGS = -D LINUX -L$(MINILIBX_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz # -o $(NAME) # -Imlx_linux
 
 SRC_DIR = src
-SRC = $(SRC_DIR)/*.c # TODO
+SRC = $(SRC_DIR)/checkinput.c  $(SRC_DIR)/color.c $(SRC_DIR)/fdf.c $(SRC_DIR)/parseinput.c
 OBJ = $(SRC:.c=.o)
 
 INCLUDES = -I./includes -I$(LIBFT_DIR)/includes -I$(MINILIBX_DIR)
