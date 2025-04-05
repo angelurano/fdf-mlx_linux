@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:20:37 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 10:46:42 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/05 13:00:31 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,13 @@ int	main(int argc, char *argv[])
 
 	if (argc != 2)
 		return (ft_printf_error("Usage: %s <map.fdf>\n", argv[0]), 1);
+	null_set_fdf(&fdf);
 	if (parse_input(&fdf, argv[1]))
 		return (1);
-	printf("Points: %zu\n", fdf.points.buffer->size);
-	printf("Capacity: %zu\n", fdf.points.buffer->capacity);
-	printf("Lines: %zu\n", fdf.points.lines);
-	printf("Line length: %zu\n", fdf.points.line_length);
-	/*
-	for (size_t i = 0; i < fdf.points.lines * fdf.points.line_length; i++)
-	{
-		t_point *point = ft_dynarrget(fdf.points.buffer, i);
-		if (point)
-			printf("Point %zu: (%f, %f, %f) Color rgba: (%u, %u, %u, %u)\n", i,
-				point->coord.x, point->coord.y, point->coord.z,
-				point->color.r, point->color.g, point->color.b, point->color.t);
-	}
-	*/
+	if (init_fdf(&fdf))
+		return (ft_printf_error("Error initializing FDF\n"),
+			ft_dynarrfree(&fdf.points.buffer, NULL), 1);
+	mlx_loop(fdf.connection);
 	ft_dynarrfree(&fdf.points.buffer, NULL);
 	/*
 	void	*mlx;

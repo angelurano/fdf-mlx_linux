@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 11:59:50 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/05 12:52:24 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,27 @@
 
 # include "mlx.h" // minilibx
 # include "libft.h" // libft, gnl, printf
+
+# define HEIGHT 600
+# define WIDTH 800
+
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846
+# endif
+
+# ifndef M_PI_2
+#  define M_PI_2 1.57079632679489661923
+# endif
+
+# ifndef M_PI_4
+#  define M_PI_4 0.78539816339744830962
+# endif
+
+typedef struct s_vector2
+{
+	float	x;
+	float	y;
+}				t_vector2;
 
 typedef struct s_vector3
 {
@@ -58,15 +79,29 @@ typedef struct s_points
 
 typedef struct s_data
 {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
+	void	*img_ptr;
+	char	*pixels_ptr;
+	int		bpp;
 	int		endian;
+	int		line_length;
 }				t_data;
+
+typedef struct s_camera
+{
+	float		zoom;
+	float		z_scale;
+	t_vector3	offset;
+	float		rot_x;
+	float		rot_y;
+	float		rot_z;
+}		t_camera;
 
 typedef struct s_fdf
 {
+	void		*connection;
+	void		*window;
+	t_data		img;
+	t_camera	camera;
 	t_points	points;
 }				t_fdf;
 
@@ -86,5 +121,9 @@ t_color		parse_color(char *value);
 size_t		parse_value(t_fdf *fdf, char *value, float x, float y);
 int			parse_line(t_fdf *fdf, char *line, int index);
 int			parse_input(t_fdf *fdf, char *filename);
+
+void		null_set_fdf(t_fdf *fdf);
+void		init_data(t_fdf *fdf);
+int			init_fdf(t_fdf *fdf);
 
 #endif
