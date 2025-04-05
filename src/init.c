@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:36:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 12:56:08 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:29:43 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,6 @@ void	null_set_fdf(t_fdf *fdf)
 
 void	init_data(t_fdf *fdf)
 {
-	/*
-	fdf->img.bpp /= 8;
-	fdf->img.line_length /= fdf->img.bpp;
-	if (fdf->img.endian == 0)
-		fdf->img.endian = 1;
-	else
-		fdf->img.endian = 0;
-	*/
 	fdf->camera.zoom = 1.0;
 	fdf->camera.z_scale = 1.0;
 	fdf->camera.offset.x = 0.0;
@@ -44,6 +36,15 @@ void	init_data(t_fdf *fdf)
 	fdf->camera.rot_x = 0.0;
 	fdf->camera.rot_y = 0.0;
 	fdf->camera.rot_z = 0.0;
+}
+
+void	init_events(t_fdf *fdf)
+{
+	mlx_hook(fdf->window,
+		DestroyNotify,
+		StructureNotifyMask,
+		close_handler,
+		fdf);
 }
 
 int	init_fdf(t_fdf *fdf)
@@ -68,5 +69,6 @@ int	init_fdf(t_fdf *fdf)
 			mlx_destroy_window(fdf->connection, fdf->window),
 			mlx_destroy_display(fdf->connection), free(fdf->connection), 1);
 	init_data(fdf);
+	init_events(fdf);
 	return (0);
 }

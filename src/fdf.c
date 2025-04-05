@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:20:37 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 13:00:31 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:40:03 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	main(int argc, char *argv[])
 		return (ft_printf_error("Error initializing FDF\n"),
 			ft_dynarrfree(&fdf.points.buffer, NULL), 1);
 	mlx_loop(fdf.connection);
-	ft_dynarrfree(&fdf.points.buffer, NULL);
+	close_handler(&fdf);
 	/*
 	void	*mlx;
 	void	*mlx_win;

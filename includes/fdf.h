@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 12:52:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/05 17:29:28 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@
 # include <math.h> // math functions, -lm flag required in compilation
 
 # include <stdint.h> // int & u int types
+# include <X11/X.h> // X11 interface, events, masks
+# include <X11/keysym.h> // XK_* (keysyms)
 
 # include "mlx.h" // minilibx
 # include "libft.h" // libft, gnl, printf
 
-# define HEIGHT 600
-# define WIDTH 800
+# define HEIGHT 800
+# define WIDTH 1000
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -115,6 +117,8 @@ int			hexpair_to_dec(const char *s);
 uint32_t	get_argb(int a, int r, int g, int b);
 t_color		create_color(uint8_t a, uint8_t r, uint8_t g, uint8_t b);
 uint32_t	convert_color(t_color color);
+
+int			close_handler(t_fdf *fdf);
 
 t_list		*read_file(int fd);
 t_color		parse_color(char *value);
