@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 09:55:33 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/05 11:59:50 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 
 # include <math.h> // math functions, -lm flag required in compilation
 
-# include <stdint.h>
+# include <stdint.h> // int & u int types
 
 # include "mlx.h" // minilibx
 # include "libft.h" // libft, gnl, printf
@@ -37,7 +37,7 @@ typedef struct s_vector3
 
 typedef struct s_color
 {
-	u_int8_t	t;
+	u_int8_t	a;
 	u_int8_t	r;
 	u_int8_t	g;
 	u_int8_t	b;
@@ -51,11 +51,6 @@ typedef struct s_point
 
 typedef struct s_points
 {
-	/*
-	t_point		*points;
-	size_t		capacity;
-	size_t		size;
-	*/
 	t_dynarr	*buffer;
 	size_t		lines;
 	size_t		line_length;
@@ -75,15 +70,21 @@ typedef struct s_fdf
 	t_points	points;
 }				t_fdf;
 
-int		hexchar_to_dec(char c);
-int		hexpair_to_dec(const char *s);
-int		create_trgb(uint8_t t, uint8_t r, uint8_t g, uint8_t b);
-t_color	create_color(uint8_t t, uint8_t r, uint8_t g, uint8_t b);
+int			is_valid_filename(char *filename);
+int			is_valid_color(char *str);
+int			is_number(char *str);
+int			is_valid_value(char *str);
 
-int		is_valid_filename(char *filename);
-int		is_valid_color(char *str);
-int		is_valid_value(char *str);
+int			hexchar_to_dec(char c);
+int			hexpair_to_dec(const char *s);
+uint32_t	get_argb(int a, int r, int g, int b);
+t_color		create_color(uint8_t a, uint8_t r, uint8_t g, uint8_t b);
+uint32_t	convert_color(t_color color);
 
-int		parse_input(t_fdf *fdf, char *filename);
+t_list		*read_file(int fd);
+t_color		parse_color(char *value);
+size_t		parse_value(t_fdf *fdf, char *value, float x, float y);
+int			parse_line(t_fdf *fdf, char *line, int index);
+int			parse_input(t_fdf *fdf, char *filename);
 
 #endif
