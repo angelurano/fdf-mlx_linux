@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 08:29:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 11:59:37 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/07 11:44:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,15 @@ int	hexpair_to_dec(const char *s)
 	return (hexchar_to_dec(s[0]) * 16 + hexchar_to_dec(s[1]));
 }
 
-uint32_t	get_argb(int a, int r, int g, int b)
+uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
 {
 	return ((a << 24) | (r << 16) | (g << 8) | b);
 }
 
-t_color	create_color(uint8_t a, uint8_t r, uint8_t g, uint8_t b)
+// endian = 0 little endian, endian = 1 big endian
+int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b)
 {
-	t_color	color;
-
-	color.a = a;
-	color.r = r;
-	color.g = g;
-	color.b = b;
-	return (color);
-}
-
-uint32_t	convert_color(t_color color)
-{
-	return (get_argb(color.a, color.r, color.g, color.b));
+	if (endian == 0)
+		return ((255 << 24) | (r << 16) | (g << 8) | (b));
+	return ((255) | (r << 8) | (g << 16) | (b << 24));
 }

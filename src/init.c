@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:36:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 17:29:43 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/07 00:01:55 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,20 @@ int	init_fdf(t_fdf *fdf)
 	fdf->connection = mlx_init();
 	if (fdf->connection == NULL)
 		return (ft_printf_error("Error initializing connection\n"), 1);
-	fdf->window = mlx_new_window(fdf->connection, WIDTH, HEIGHT, "FDF");
-	if (fdf->window == NULL)
-		return (ft_printf_error("Error creating window\n"),
-			mlx_destroy_display(fdf->connection), free(fdf->connection), 1);
 	fdf->img.img_ptr = mlx_new_image(fdf->connection, WIDTH, HEIGHT);
 	if (fdf->img.img_ptr == NULL)
 		return (ft_printf_error("Error creating image\n"),
-			mlx_destroy_window(fdf->connection, fdf->window),
 			mlx_destroy_display(fdf->connection), free(fdf->connection), 1);
 	fdf->img.pixels_ptr = mlx_get_data_addr(fdf->img.img_ptr,
 			&fdf->img.bpp, &fdf->img.line_length, &fdf->img.endian);
 	if (fdf->img.pixels_ptr == NULL)
 		return (ft_printf_error("Error getting image data address\n"),
 			mlx_destroy_image(fdf->connection, fdf->img.img_ptr),
-			mlx_destroy_window(fdf->connection, fdf->window),
+			mlx_destroy_display(fdf->connection), free(fdf->connection), 1);
+	fdf->window = mlx_new_window(fdf->connection, WIDTH, HEIGHT, "FDF");
+	if (fdf->window == NULL)
+		return (ft_printf_error("Error creating window\n"),
+			mlx_destroy_image(fdf->connection, fdf->img.img_ptr),
 			mlx_destroy_display(fdf->connection), free(fdf->connection), 1);
 	init_data(fdf);
 	init_events(fdf);

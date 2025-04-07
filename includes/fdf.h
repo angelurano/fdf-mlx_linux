@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 17:29:28 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/07 11:53:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,31 @@ typedef struct s_vector3
 	float	z;
 }				t_vector3;
 
-typedef struct s_color
-{
-	u_int8_t	a;
-	u_int8_t	r;
-	u_int8_t	g;
-	u_int8_t	b;
-}				t_color;
-
 typedef struct s_point
 {
 	t_vector3	coord;
-	t_color		color;
+	uint32_t	color;
 }				t_point;
+
+typedef struct s_pixel
+{
+	uint8_t	b;
+	uint8_t	g;
+	uint8_t	r;
+	uint8_t	a;
+}				t_pixel;
+
+/*
+typedef struct s_pixel
+{
+	t_color	color;
+}				t_pixel;
+
+typedef struct s_framebuffer
+{
+	t_pixel	*buffer;
+}				t_framebuffer;
+*/
 
 typedef struct s_points
 {
@@ -79,14 +91,14 @@ typedef struct s_points
 	size_t		line_length;
 }				t_points;
 
-typedef struct s_data
+typedef struct s_img
 {
 	void	*img_ptr;
 	char	*pixels_ptr;
 	int		bpp;
 	int		endian;
 	int		line_length;
-}				t_data;
+}				t_img;
 
 typedef struct s_camera
 {
@@ -102,9 +114,10 @@ typedef struct s_fdf
 {
 	void		*connection;
 	void		*window;
-	t_data		img;
-	t_camera	camera;
+	t_pixel		*framebuffer; // TODO
+	t_img		img;
 	t_points	points;
+	t_camera	camera;
 }				t_fdf;
 
 int			is_valid_filename(char *filename);
@@ -114,14 +127,13 @@ int			is_valid_value(char *str);
 
 int			hexchar_to_dec(char c);
 int			hexpair_to_dec(const char *s);
-uint32_t	get_argb(int a, int r, int g, int b);
-t_color		create_color(uint8_t a, uint8_t r, uint8_t g, uint8_t b);
-uint32_t	convert_color(t_color color);
+uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b);
+int			get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b);
 
 int			close_handler(t_fdf *fdf);
 
 t_list		*read_file(int fd);
-t_color		parse_color(char *value);
+u_int32_t	parse_color(char *value);
 size_t		parse_value(t_fdf *fdf, char *value, float x, float y);
 int			parse_line(t_fdf *fdf, char *line, int index);
 int			parse_input(t_fdf *fdf, char *filename);
@@ -129,5 +141,8 @@ int			parse_input(t_fdf *fdf, char *filename);
 void		null_set_fdf(t_fdf *fdf);
 void		init_data(t_fdf *fdf);
 int			init_fdf(t_fdf *fdf);
+
+void		render(t_fdf *fdf);
+void		put_img_pixel(t_fdf *fdf, int x, int y, t_pixel color);
 
 #endif

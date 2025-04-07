@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 11:23:41 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/05 19:04:11 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,30 +40,30 @@ t_list	*read_file(int fd)
 	return (head);
 }
 
-t_color	parse_color(char *value)
+u_int32_t	parse_color(char *value)
 {
-	t_color	color;
-	size_t	len;
+	uint32_t	color;
+	size_t		len;
 
-	color = create_color(255, 255, 255, 255);
+	color = get_argb(255, 255, 255, 255);
 	if (value == NULL)
 		return (color);
 	len = 0;
 	while (value[len + 2] && value[len + 2] != ' ')
 		len++;
 	if (len == 8)
-		color = create_color(hexpair_to_dec(value), hexpair_to_dec(value + 2),
+		color = get_argb(hexpair_to_dec(value), hexpair_to_dec(value + 2),
 				hexpair_to_dec(value + 4), hexpair_to_dec(value + 6));
 	else if (len == 6)
-		color = create_color(255, hexpair_to_dec(value),
+		color = get_argb(255, hexpair_to_dec(value),
 				hexpair_to_dec(value + 2), hexpair_to_dec(value + 4));
 	else if (len == 4)
-		color = create_color(255, 0, hexpair_to_dec(value),
+		color = get_argb(255, 0, hexpair_to_dec(value),
 				hexpair_to_dec(value + 2));
 	else if (len == 2)
-		color = create_color(255, 0, 0, hexpair_to_dec(value));
+		color = get_argb(255, 0, 0, hexpair_to_dec(value));
 	else if (len == 3)
-		color = create_color(255, hexchar_to_dec(value[0]),
+		color = get_argb(255, hexchar_to_dec(value[0]),
 				hexchar_to_dec(value[1]), hexchar_to_dec(value[2]));
 	return (color);
 }
@@ -86,7 +86,7 @@ size_t	parse_value(t_fdf *fdf, char *value, float x, float y)
 	if (comma != NULL)
 		point.color = parse_color(comma);
 	else
-		point.color = create_color(255, 255, 255, 255);
+		point.color = get_argb(255, 255, 255, 255);
 	if (ft_dynarradd(fdf->points.buffer, &point) == 0)
 		return (ft_printf_error("Error malloc\n"), 0);
 	return (val_len);
