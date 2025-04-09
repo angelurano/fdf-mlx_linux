@@ -15,7 +15,7 @@ MINILIBX_I = $(MINILIBX_DIR)
 MINILIBX_FLAGS = -D LINUX -L$(MINILIBX_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
 
 SRC_DIR = src
-SRC = $(SRC_DIR)/checkinput.c $(SRC_DIR)/color.c $(SRC_DIR)/fdf.c $(SRC_DIR)/handlers.c $(SRC_DIR)/init.c $(SRC_DIR)/parseinput.c $(SRC_DIR)/render.c
+SRC = $(SRC_DIR)/checkinput.c $(SRC_DIR)/color.c $(SRC_DIR)/fdf.c $(SRC_DIR)/handlers.c $(SRC_DIR)/init.c $(SRC_DIR)/math_utils.c $(SRC_DIR)/parseinput.c $(SRC_DIR)/render.c
 OBJ = $(SRC:.c=.o)
 
 INCLUDE_DIR = ./includes

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 02:39:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 11:00:20 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:00:32 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	is_valid_color(char *str)
 		len++;
 		i++;
 	}
-	if (len != 8 && len != 6 && len != 4 && len != 3 && len != 2)
+	if (len != 6 && len != 4 && len != 3 && len != 2)
 		return (0);
 	if (str[i] != '\0' && str[i] != ' ' && str[i] != '\n')
 		return (0);

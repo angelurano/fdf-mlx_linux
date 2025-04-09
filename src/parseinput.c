@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/05 19:04:11 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/07 12:04:51 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,14 @@ u_int32_t	parse_color(char *value)
 	len = 0;
 	while (value[len + 2] && value[len + 2] != ' ')
 		len++;
-	if (len == 8)
-		color = get_argb(hexpair_to_dec(value), hexpair_to_dec(value + 2),
-				hexpair_to_dec(value + 4), hexpair_to_dec(value + 6));
-	else if (len == 6)
-		color = get_argb(255, hexpair_to_dec(value),
-				hexpair_to_dec(value + 2), hexpair_to_dec(value + 4));
+	if (len == 6)
+		color = get_argb(255, hex_to_dec(value, 2),
+				hex_to_dec(value + 2, 2), hex_to_dec(value + 4, 2));
 	else if (len == 4)
-		color = get_argb(255, 0, hexpair_to_dec(value),
-				hexpair_to_dec(value + 2));
+		color = get_argb(255, 0, hex_to_dec(value, 2),
+				hex_to_dec(value + 2, 2));
 	else if (len == 2)
-		color = get_argb(255, 0, 0, hexpair_to_dec(value));
+		color = get_argb(255, 0, 0, hex_to_dec(value, 2));
 	else if (len == 3)
 		color = get_argb(255, hexchar_to_dec(value[0]),
 				hexchar_to_dec(value[1]), hexchar_to_dec(value[2]));

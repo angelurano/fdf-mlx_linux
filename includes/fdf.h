@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/07 11:53:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/09 23:45:46 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,18 @@ typedef struct s_pixel
 	uint8_t	r;
 	uint8_t	a;
 }				t_pixel;
-
 /*
 typedef struct s_pixel
 {
 	t_color	color;
 }				t_pixel;
-
+*/
 typedef struct s_framebuffer
 {
 	t_pixel	*buffer;
+	size_t	width;
+	size_t	height;
 }				t_framebuffer;
-*/
 
 typedef struct s_points
 {
@@ -110,6 +110,14 @@ typedef struct s_camera
 	float		rot_z;
 }		t_camera;
 
+typedef struct s_input
+{
+	char	key_up;
+	char	key_down;
+	char	key_left;
+	char	key_right;
+}				t_input;
+
 typedef struct s_fdf
 {
 	void		*connection;
@@ -118,6 +126,7 @@ typedef struct s_fdf
 	t_img		img;
 	t_points	points;
 	t_camera	camera;
+	t_input	input;
 }				t_fdf;
 
 int			is_valid_filename(char *filename);
@@ -125,12 +134,20 @@ int			is_valid_color(char *str);
 int			is_number(char *str);
 int			is_valid_value(char *str);
 
+float		rad_to_deg(float rad);
+float		deg_to_rad(float deg);
 int			hexchar_to_dec(char c);
-int			hexpair_to_dec(const char *s);
+int			hex_to_dec(char *str, int len);
+
 uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b);
-int			get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b);
+unsigned int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b);
+t_pixel		get_pixel(uint32_t color);
+t_pixel		blend_pixel(t_pixel fg, t_pixel bg);
 
 int			close_handler(t_fdf *fdf);
+int			key_press_handler(int keysym, t_fdf *fdf);
+int			key_release_handler(int keysym, t_fdf *fdf);
+int			loop_handler(t_fdf *fdf);
 
 t_list		*read_file(int fd);
 u_int32_t	parse_color(char *value);
@@ -143,6 +160,6 @@ void		init_data(t_fdf *fdf);
 int			init_fdf(t_fdf *fdf);
 
 void		render(t_fdf *fdf);
-void		put_img_pixel(t_fdf *fdf, int x, int y, t_pixel color);
+void		clear_framebuffer(t_fdf *fdf);
 
 #endif

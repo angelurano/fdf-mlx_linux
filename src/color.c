@@ -6,37 +6,84 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 08:29:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/07 11:44:27 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/09 23:18:52 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	hexchar_to_dec(char c)
+t_pixel	blend_pixel(t_pixel fg, t_pixel bg)
 {
-	if (c >= '0' && c <= '9')
-		return (c - '0');
-	if (c >= 'a' && c <= 'f')
-		return (10 + c - 'a');
-	if (c >= 'A' && c <= 'F')
-		return (10 + c - 'A');
-	return (0);
+	t_pixel	out;
+	float	a_fg;
+	float	a_bg;
+	float	a_out;
+
+	a_fg = fg.a / 255.0f;
+	a_bg = bg.a / 255.0f;
+	a_out = a_fg + a_bg * (1.0f - a_fg);
+	if (a_out == 0.0f)
+	{
+		out.r = 0;
+		out.g = 0;
+		out.b = 0;
+		out.a = 0;
+		return (out);
+	}
+	out.r = (uint8_t)(((fg.r * a_fg + bg.r * a_bg * (1.0f - a_fg)) / a_out)
+			+ 0.5f);
+	out.g = (uint8_t)(((fg.g * a_fg + bg.g * a_bg * (1.0f - a_fg)) / a_out)
+			+ 0.5f);
+	out.b = (uint8_t)(((fg.b * a_fg + bg.b * a_bg * (1.0f - a_fg)) / a_out)
+			+ 0.5f);
+	out.a = (uint8_t)(a_out * 255.0f + 0.5f);
+	return (out);
 }
 
-int	hexpair_to_dec(const char *s)
+/*
+t_pixel	blend_pixel(t_pixel fg, t_pixel bg)
 {
-	return (hexchar_to_dec(s[0]) * 16 + hexchar_to_dec(s[1]));
+	t_pixel	out;
+	float	alpha_out;
+
+	alpha_out = fg.a + bg.a * (1.0f - fg.a);
+	if (alpha_out == 0.0f)
+	{
+		out.r = 0;
+		out.g = 0;
+		out.b = 0;
+		out.a = 0;
+		return (out);
+	}
+	out.r = (fg.r * fg.a + bg.r * bg.a * (1.0f - fg.a)) / alpha_out;
+	out.g = (fg.g * fg.a + bg.g * bg.a * (1.0f - fg.a)) / alpha_out;
+	out.b = (fg.b * fg.a + bg.b * bg.a * (1.0f - fg.a)) / alpha_out;
+	out.a = alpha_out;
+	return (out);
 }
+*/
 
 uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
 {
 	return ((a << 24) | (r << 16) | (g << 8) | b);
 }
 
+t_pixel	get_pixel(uint32_t color)
+{
+	t_pixel	out;
+
+	//out.a = ((color >> 24) & 0xFF) / 255.0f;
+	out.a = (color >> 24) & 0xFF;
+	out.r = (color >> 16) & 0xFF;
+	out.g = (color >> 8) & 0xFF;
+	out.b = color & 0xFF;
+	return (out);
+}
+
 // endian = 0 little endian, endian = 1 big endian
-int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b)
+unsigned int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b)
 {
 	if (endian == 0)
-		return ((255 << 24) | (r << 16) | (g << 8) | (b));
-	return ((255) | (r << 8) | (g << 16) | (b << 24));
+		return ((255u << 24) | (r << 16) | (g << 8) | (b));
+	return ((255u) | (r << 8) | (g << 16) | (b << 24));
 }
