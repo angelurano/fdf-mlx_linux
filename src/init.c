@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:36:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/09 23:46:15 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/14 13:26:32 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ void	init_data(t_fdf *fdf)
 	fdf->camera.rot_x = 0.0;
 	fdf->camera.rot_y = 0.0;
 	fdf->camera.rot_z = 0.0;
+	fdf->input.key_down = 0;
+	fdf->input.key_left = 0;
+	fdf->input.key_right = 0;
+	fdf->input.key_up = 0;
 }
 
 void	init_events(t_fdf *fdf)

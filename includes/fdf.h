@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/09 23:45:46 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 06:20:06 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct s_fdf
 	t_img		img;
 	t_points	points;
 	t_camera	camera;
-	t_input	input;
+	t_input		input;
 }				t_fdf;
 
 int			is_valid_filename(char *filename);
@@ -143,6 +143,7 @@ uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b);
 unsigned int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b);
 t_pixel		get_pixel(uint32_t color);
 t_pixel		blend_pixel(t_pixel fg, t_pixel bg);
+t_pixel		apply_opacity(t_pixel color, float intensity);
 
 int			close_handler(t_fdf *fdf);
 int			key_press_handler(int keysym, t_fdf *fdf);
@@ -158,6 +159,9 @@ int			parse_input(t_fdf *fdf, char *filename);
 void		null_set_fdf(t_fdf *fdf);
 void		init_data(t_fdf *fdf);
 int			init_fdf(t_fdf *fdf);
+
+void		plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_pixel color);
+void		draw_wu_line(t_fdf *fdf, t_vector2 p0, t_vector2 p1, t_pixel color);
 
 void		render(t_fdf *fdf);
 void		clear_framebuffer(t_fdf *fdf);

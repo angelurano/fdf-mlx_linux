@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 08:29:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/09 23:18:52 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 06:58:29 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,22 @@ t_pixel	blend_pixel(t_pixel fg, t_pixel bg)
 	out.b = (uint8_t)(((fg.b * a_fg + bg.b * a_bg * (1.0f - a_fg)) / a_out)
 			+ 0.5f);
 	out.a = (uint8_t)(a_out * 255.0f + 0.5f);
+	return (out);
+}
+
+t_pixel	apply_opacity(t_pixel color, float intensity)
+{
+	t_pixel	out;
+
+	out.r = (uint8_t)(color.r * intensity);
+	out.g = (uint8_t)(color.g * intensity);
+	out.b = (uint8_t)(color.b * intensity);
+	if (intensity <= 0.0f)
+		out.a = 0;
+	else if (intensity >= 1.0f)
+		out.a = 255;
+	else
+		out.a = (uint8_t)(color.a * intensity + 0.5f);
 	return (out);
 }
 
