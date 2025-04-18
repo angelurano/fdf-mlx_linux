@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:13:05 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/07 12:05:10 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:28:50 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@ float	rad_to_deg(float rad)
 float	deg_to_rad(float deg)
 {
 	return (deg * (M_PI / 180.0));
+}
+
+float	frac_part(float x)
+{
+	return (x - floorf(x));
+}
+
+int	roundf_to_int(float x)
+{
+	return ((int)(floorf(x + 0.5f)));
 }
 
 int	hexchar_to_dec(char c)

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 08:29:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/18 06:58:29 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:23:50 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,31 @@ t_pixel	apply_opacity(t_pixel color, float intensity)
 	else
 		out.a = (uint8_t)(color.a * intensity + 0.5f);
 	return (out);
+}
+
+t_pixel	lerp_color(t_pixel a, t_pixel b, float t)
+{
+	t_pixel	out;
+
+	out.r = (uint8_t)(a.r + (b.r - a.r) * t + 0.5f);
+	out.g = (uint8_t)(a.g + (b.g - a.g) * t + 0.5f);
+	out.b = (uint8_t)(a.b + (b.b - a.b) * t + 0.5f);
+	if (t <= 0.0f)
+		out.a = a.a;
+	else if (t >= 1.0f)
+		out.a = b.a;
+	else
+		out.a = (uint8_t)(a.a + (b.a - a.a) * t + 0.5f);
+	return (out);
+}
+
+void	swap_colors(t_pixel *a, t_pixel *b)
+{
+	t_pixel	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }
 
 /*

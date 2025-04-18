@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:22:35 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/18 07:03:23 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:23:28 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	clear_framebuffer(t_fdf *fdf)
 		fdf->framebuffer[i].r = 0;
 		fdf->framebuffer[i].g = 0;
 		fdf->framebuffer[i].b = 0;
-		fdf->framebuffer[i].a = 255;
+		fdf->framebuffer[i].a = 0;
 		i++;
 	}
 }
@@ -108,7 +108,7 @@ void	tranform_to_img(t_fdf *fdf)
 	}
 }
 
-void draw_example_lines(t_fdf *fdf, t_pixel color)
+void draw_example_lines(t_fdf *fdf, t_pixel color1, t_pixel color2)
 {
 	// Centro de la pantalla con offset
 	int cx = WIDTH  / 2 + (int)fdf->camera.offset.x;
@@ -121,36 +121,75 @@ void draw_example_lines(t_fdf *fdf, t_pixel color)
 	// ——— Línea a 30° ———
 	p1.x = (int)(p0.x + cosf(30.0f * (M_PI / 180.0f)) * 150.0f);  // longitud 150 px
 	p1.y = (int)(p0.y + sinf(30.0f * (M_PI / 180.0f)) * 150.0f);
-	draw_wu_line(fdf, p0, p1, color);
+	draw_line(fdf, p0, p1, color1, color2);
 
 	// ——— Línea a 60° ———
 	p1.x = (int)(p0.x + cosf(60.0f * (M_PI / 180.0f)) * 150.0f);
 	p1.y = (int)(p0.y + sinf(60.0f * (M_PI / 180.0f)) * 150.0f);
-	draw_wu_line(fdf, p0, p1, color);
+	draw_line(fdf, p0, p1, color1, color2);
 
 	// ——— Línea a 120° ———
 	p1.x = (int)(p0.x + cosf(120.0f * (M_PI / 180.0f)) * 150.0f);
 	p1.y = (int)(p0.y + sinf(120.0f * (M_PI / 180.0f)) * 150.0f);
-	draw_wu_line(fdf, p0, p1, color);
+	draw_line(fdf, p0, p1, color1, color2);
 
 	// ——— Línea a 150° ———
 	p1.x = (int)(p0.x + cosf(150.0f * (M_PI / 180.0f)) * 150.0f);
 	p1.y = (int)(p0.y + sinf(150.0f * (M_PI / 180.0f)) * 150.0f);
-	draw_wu_line(fdf, p0, p1, color);
+	draw_line(fdf, p0, p1, color1, color2);
+
+	// ——— Línea a 210° ———
+	p1.x = (int)(p0.x + cosf(210.0f * (M_PI / 180.0f)) * 150.0f);
+	p1.y = (int)(p0.y + sinf(210.0f * (M_PI / 180.0f)) * 150.0f);
+	draw_line(fdf, p0, p1, color1, color2);
+
+	// ——— Línea a 240° ———
+	p1.x = (int)(p0.x + cosf(240.0f * (M_PI / 180.0f)) * 150.0f);
+	p1.y = (int)(p0.y + sinf(240.0f * (M_PI / 180.0f)) * 150.0f);
+	draw_line(fdf, p0, p1, color1, color2);
+
+	// ——— Línea a 300° ———
+	p1.x = (int)(p0.x + cosf(300.0f * (M_PI / 180.0f)) * 150.0f);
+	p1.y = (int)(p0.y + sinf(300.0f * (M_PI / 180.0f)) * 150.0f);
+	draw_line(fdf, p0, p1, color1, color2);
+
+	// ——— Línea a 330° ———
+	p1.x = (int)(p0.x + cosf(330.0f * (M_PI / 180.0f)) * 150.0f);
+	p1.y = (int)(p0.y + sinf(330.0f * (M_PI / 180.0f)) * 150.0f);
+	draw_line(fdf, p0, p1, color1, color2);
+}
+
+void draw_fan_lines(t_fdf *fdf, t_pixel color1, t_pixel color2)
+{
+	const int start_x = WIDTH / 2 + (int)fdf->camera.offset.x;
+	const int start_y = 10 + (int)fdf->camera.offset.y;
+	const int spacing = 35; // Espacio entre líneas
+	const int max_offset = WIDTH / 2;
+
+	for (int offset = -max_offset; offset <= max_offset; offset += spacing)
+	{
+		t_vector2 end = { .x = start_x + offset, .y = HEIGHT - 1 };
+
+		t_vector2 start = { .x = start_x, .y = start_y };
+
+		draw_line(fdf, start, end, color1, color2);
+	}
 }
 
 void	render(t_fdf *fdf)
 {
-	t_pixel	red = get_pixel(get_argb(128, 255, 0, 0));
-	t_pixel	green = get_pixel(get_argb(128, 0, 255, 0));
-	t_pixel	blue = get_pixel(get_argb(128, 0, 0, 255));
+	t_pixel	red = get_pixel(get_argb(255, 255, 0, 0));
+	t_pixel	green = get_pixel(get_argb(255, 0, 255, 0));
+	t_pixel	blue = get_pixel(get_argb(255, 0, 0, 255));
+	(void)red;
+	(void)green;
+	(void)blue;
 
-	draw_circle(fdf, WIDTH / 2 - 50 + fdf->camera.offset.x, HEIGHT / 2 - 50 + fdf->camera.offset.y, 100, red);
-	draw_circle(fdf, WIDTH / 2 + 50 + fdf->camera.offset.x, HEIGHT / 2 - 50 + fdf->camera.offset.y, 100, green);
-	draw_circle(fdf, WIDTH / 2 + fdf->camera.offset.x, HEIGHT / 2 + 50 + fdf->camera.offset.y, 100, blue);
-
-	draw_example_lines(fdf, red);
-
+	// draw_circle(fdf, WIDTH / 2 - 50 + fdf->camera.offset.x, HEIGHT / 2 - 50 + fdf->camera.offset.y, 100, red);
+	// draw_circle(fdf, WIDTH / 2 + 50 + fdf->camera.offset.x, HEIGHT / 2 - 50 + fdf->camera.offset.y, 100, green);
+	// draw_circle(fdf, WIDTH / 2 + fdf->camera.offset.x, HEIGHT / 2 + 50 + fdf->camera.offset.y, 100, blue);
+	// draw_example_lines(fdf, red, blue);
+	draw_fan_lines(fdf, red, blue);
 	tranform_to_img(fdf);
 	mlx_clear_window(fdf->connection, fdf->window);
 	mlx_put_image_to_window(fdf->connection, fdf->window,

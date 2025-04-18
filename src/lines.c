@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 09:53:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/18 07:28:33 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:30:58 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -501,6 +501,8 @@ void	antialiasing_draw_line_verbose(t_vector2 c0, t_vector2 c1)
 
 typedef struct s_wu_line
 {
+	t_pixel	c0;
+	t_pixel	c1;
 	int		is_steep;
 	float	x0s;
 	float	y0s;
@@ -525,33 +527,8 @@ typedef struct s_wu_line
 	int		min_y;
 }	t_wu_line;
 
-void	ft_swap(int *a, int *b)
-{
-	int	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-void	ft_swapf(float *a, float *b)
-{
-	float	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-static float	frac_part(float x)
-{
-	return (x - floorf(x));
-}
-
-static int	round_to_int(float x)
-{
-	return ((int)(floorf(x + 0.5f)));
-}
-
 static void	set_wu_line(t_wu_line *line, t_vector2 p0, t_vector2 p1)
 {
-	line->is_steep = fabsf(p1.y - p0.y) > fabsf(p1.x - p0.x);
 	if (line->is_steep)
 	{
 		line->x0s = p0.y;
@@ -570,6 +547,7 @@ static void	set_wu_line(t_wu_line *line, t_vector2 p0, t_vector2 p1)
 	{
 		ft_swapf(&line->x0s, &line->x1s);
 		ft_swapf(&line->y0s, &line->y1s);
+		swap_colors(&line->c0, &line->c1);
 	}
 	line->dx = line->x1s - line->x0s;
 	line->dy = line->y1s - line->y0s;
@@ -578,12 +556,14 @@ static void	set_wu_line(t_wu_line *line, t_vector2 p0, t_vector2 p1)
 		line->gradient = line->dy / line->dx;
 }
 
-static void	draw_first_endpoint(t_fdf *fdf, t_wu_line *line, t_pixel color)
+static void	draw_first_endpoint(t_fdf *fdf, t_wu_line *line)
 {
+	t_pixel	c0;
 	float	i1;
 	float	i2;
 
-	line->x_pixel1 = round_to_int(line->x0s);
+	c0 = line->c0;
+	line->x_pixel1 = roundf_to_int(line->x0s);
 	line->yend = line->y0s + line->gradient * (line->x_pixel1 - line->x0s);
 	line->y_pixel1 = (int)floorf(line->yend);
 	line->xgap = 1.0f - frac_part(line->x0s + 0.5f);
@@ -591,45 +571,55 @@ static void	draw_first_endpoint(t_fdf *fdf, t_wu_line *line, t_pixel color)
 	i2 = frac_part(line->yend) * line->xgap;
 	if (line->is_steep)
 	{
-		plot_framebuffer_pixel(fdf, line->y_pixel1, line->x_pixel1, apply_opacity(color, i1));
-		plot_framebuffer_pixel(fdf, line->y_pixel1 + 1, line->x_pixel1, apply_opacity(color, i2));
+		plot_framebuffer_pixel(fdf, line->y_pixel1, line->x_pixel1,
+			apply_opacity(c0, i1));
+		plot_framebuffer_pixel(fdf, line->y_pixel1 + 1, line->x_pixel1,
+			apply_opacity(c0, i2));
 	}
 	else
 	{
-		plot_framebuffer_pixel(fdf, line->x_pixel1, line->y_pixel1, apply_opacity(color, i1));
-		plot_framebuffer_pixel(fdf, line->x_pixel1, line->y_pixel1 + 1, apply_opacity(color, i2));
+		plot_framebuffer_pixel(fdf, line->x_pixel1, line->y_pixel1,
+			apply_opacity(c0, i1));
+		plot_framebuffer_pixel(fdf, line->x_pixel1, line->y_pixel1 + 1,
+			apply_opacity(c0, i2));
 	}
 }
 
-static void	draw_middle_pixels(t_fdf *fdf, t_wu_line *line, t_pixel color)
+static void	draw_mid_pixels(t_fdf *fdf, t_wu_line *line, t_pixel c0, t_pixel c1)
 {
+	t_pixel	interpolated;
+
 	while (line->x < line->max_x)
 	{
 		line->y = (int)floorf(line->intery);
-		float i_lower = 1.0f - frac_part(line->intery);
-		float i_upper = frac_part(line->intery);
-
+		interpolated = lerp_color(c0, c1, (line->x - line->x0s) / line->dx);
 		if (line->is_steep)
 		{
-			plot_framebuffer_pixel(fdf, line->y, line->x, apply_opacity(color, i_lower));
-			plot_framebuffer_pixel(fdf, line->y + 1, line->x, apply_opacity(color, i_upper));
+			plot_framebuffer_pixel(fdf, line->y, line->x,
+				apply_opacity(interpolated, 1.0f - frac_part(line->intery)));
+			plot_framebuffer_pixel(fdf, line->y + 1, line->x,
+				apply_opacity(interpolated, frac_part(line->intery)));
 		}
 		else
 		{
-			plot_framebuffer_pixel(fdf, line->x, line->y, apply_opacity(color, i_lower));
-			plot_framebuffer_pixel(fdf, line->x, line->y + 1, apply_opacity(color, i_upper));
+			plot_framebuffer_pixel(fdf, line->x, line->y,
+				apply_opacity(interpolated, 1.0f - frac_part(line->intery)));
+			plot_framebuffer_pixel(fdf, line->x, line->y + 1,
+				apply_opacity(interpolated, frac_part(line->intery)));
 		}
 		line->intery += line->gradient;
 		line->x++;
 	}
 }
 
-static void	draw_last_endpoint(t_fdf *fdf, t_wu_line *line, t_pixel color)
+static void	draw_last_endpoint(t_fdf *fdf, t_wu_line *line)
 {
 	float	i1;
 	float	i2;
+	t_pixel	c1;
 
-	line->x_pixel2 = round_to_int(line->x1s);
+	c1 = line->c1;
+	line->x_pixel2 = roundf_to_int(line->x1s);
 	line->yend2 = line->y1s + line->gradient * (line->x_pixel2 - line->x1s);
 	line->y_pixel2 = (int)floorf(line->yend2);
 	line->xgap2 = frac_part(line->x1s + 0.5f);
@@ -637,26 +627,34 @@ static void	draw_last_endpoint(t_fdf *fdf, t_wu_line *line, t_pixel color)
 	i2 = frac_part(line->yend2) * line->xgap2;
 	if (line->is_steep)
 	{
-		plot_framebuffer_pixel(fdf, line->y_pixel2, line->x_pixel2, apply_opacity(color, i1));
-		plot_framebuffer_pixel(fdf, line->y_pixel2 + 1, line->x_pixel2, apply_opacity(color, i2));
+		plot_framebuffer_pixel(fdf, line->y_pixel2, line->x_pixel2,
+			apply_opacity(c1, i1));
+		plot_framebuffer_pixel(fdf, line->y_pixel2 + 1, line->x_pixel2,
+			apply_opacity(c1, i2));
 	}
 	else
 	{
-		plot_framebuffer_pixel(fdf, line->x_pixel2, line->y_pixel2, apply_opacity(color, i1));
-		plot_framebuffer_pixel(fdf, line->x_pixel2, line->y_pixel2 + 1, apply_opacity(color, i2));
+		plot_framebuffer_pixel(fdf, line->x_pixel2, line->y_pixel2,
+			apply_opacity(c1, i1));
+		plot_framebuffer_pixel(fdf, line->x_pixel2, line->y_pixel2 + 1,
+			apply_opacity(c1, i2));
 	}
 }
 
-void	draw_wu_line(t_fdf *fdf, t_vector2 p0, t_vector2 p1, t_pixel color)
+// TODO: solve n of params and names, probably must change color type and pixels for include coords
+void	draw_line(t_fdf *fdf, t_vector2 p0, t_vector2 p1, t_pixel c0, t_pixel c1)
 {
 	t_wu_line	line;
 
+	line.c0 = c0;
+	line.c1 = c1;
+	line.is_steep = fabsf(p1.y - p0.y) > fabsf(p1.x - p0.x);
 	set_wu_line(&line, p0, p1);
-	draw_first_endpoint(fdf, &line, color);
+	draw_first_endpoint(fdf, &line);
 	line.intery = line.yend + line.gradient;
 	line.min_x = line.x_pixel1 + 1;
-	line.max_x = round_to_int(line.x1s);
+	line.max_x = roundf_to_int(line.x1s);
 	line.x = line.min_x;
-	draw_middle_pixels(fdf, &line, color);
-	draw_last_endpoint(fdf, &line, color);
+	draw_mid_pixels(fdf, &line, line.c0, line.c1);
+	draw_last_endpoint(fdf, &line);
 }

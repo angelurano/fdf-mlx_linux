@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/18 06:20:06 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/18 19:28:38 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,12 +138,16 @@ float		rad_to_deg(float rad);
 float		deg_to_rad(float deg);
 int			hexchar_to_dec(char c);
 int			hex_to_dec(char *str, int len);
+int			roundf_to_int(float x);
+float		frac_part(float x);
 
 uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b);
 unsigned int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b);
 t_pixel		get_pixel(uint32_t color);
 t_pixel		blend_pixel(t_pixel fg, t_pixel bg);
 t_pixel		apply_opacity(t_pixel color, float intensity);
+t_pixel		lerp_color(t_pixel a, t_pixel b, float t);
+void		swap_colors(t_pixel *a, t_pixel *b);
 
 int			close_handler(t_fdf *fdf);
 int			key_press_handler(int keysym, t_fdf *fdf);
@@ -161,7 +165,7 @@ void		init_data(t_fdf *fdf);
 int			init_fdf(t_fdf *fdf);
 
 void		plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_pixel color);
-void		draw_wu_line(t_fdf *fdf, t_vector2 p0, t_vector2 p1, t_pixel color);
+void		draw_line(t_fdf *fdf, t_vector2 p0, t_vector2 p1, t_pixel c0, t_pixel c1);
 
 void		render(t_fdf *fdf);
 void		clear_framebuffer(t_fdf *fdf);
