@@ -6,11 +6,25 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 08:29:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/18 19:23:50 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/21 19:18:31 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+uint8_t	blend_channel_gc(uint8_t fg, uint8_t bg, float a_fg)
+{
+	float	alpha;
+	float	linear_fg;
+	float	linear_bg;
+	float	linear_color;
+
+	alpha = 2.2f;
+	linear_fg = pow(fg / 255.0f, alpha);
+	linear_bg = pow(bg / 255.0f, alpha);
+	linear_color = (linear_fg * a_fg + linear_bg * (1.0f - a_fg));
+	return ((uint8_t)(pow(linear_color, 1 / alpha) * 255.0f + 0.5f));
+}
 
 t_pixel	blend_pixel(t_pixel fg, t_pixel bg)
 {
@@ -30,12 +44,9 @@ t_pixel	blend_pixel(t_pixel fg, t_pixel bg)
 		out.a = 0;
 		return (out);
 	}
-	out.r = (uint8_t)(((fg.r * a_fg + bg.r * a_bg * (1.0f - a_fg)) / a_out)
-			+ 0.5f);
-	out.g = (uint8_t)(((fg.g * a_fg + bg.g * a_bg * (1.0f - a_fg)) / a_out)
-			+ 0.5f);
-	out.b = (uint8_t)(((fg.b * a_fg + bg.b * a_bg * (1.0f - a_fg)) / a_out)
-			+ 0.5f);
+	out.r = blend_channel_gc(fg.r, bg.r, a_fg);
+	out.g = blend_channel_gc(fg.g, bg.g, a_fg);
+	out.b = blend_channel_gc(fg.b, bg.b, a_fg);
 	out.a = (uint8_t)(a_out * 255.0f + 0.5f);
 	return (out);
 }
@@ -44,9 +55,9 @@ t_pixel	apply_opacity(t_pixel color, float intensity)
 {
 	t_pixel	out;
 
-	out.r = (uint8_t)(color.r * intensity);
-	out.g = (uint8_t)(color.g * intensity);
-	out.b = (uint8_t)(color.b * intensity);
+	out.r = color.r;
+	out.g = color.g;
+	out.b = color.b;
 	if (intensity <= 0.0f)
 		out.a = 0;
 	else if (intensity >= 1.0f)

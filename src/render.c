@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:22:35 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/18 19:23:28 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/19 02:54:56 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	clear_framebuffer(t_fdf *fdf)
 		fdf->framebuffer[i].r = 0;
 		fdf->framebuffer[i].g = 0;
 		fdf->framebuffer[i].b = 0;
-		fdf->framebuffer[i].a = 0;
+		fdf->framebuffer[i].a = 255;
 		i++;
 	}
 }
@@ -38,10 +38,7 @@ void	plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_pixel color)
 		return ;
 	else
 	{
-		if (pixel->a == 0)
-			ft_memcpy(pixel, &color, sizeof(t_pixel));
-		else
-			*pixel = blend_pixel(color, *pixel);
+		*pixel = blend_pixel(color, *pixel);
 	}
 }
 
@@ -90,8 +87,10 @@ void	tranform_to_img(t_fdf *fdf)
 	int				j;
 	unsigned int	*pixel;
 	t_pixel			over_bg;
+	t_pixel			black;
 
 	i = 0;
+	black = get_pixel(get_argb(255, 0, 0, 0));
 	while (i < HEIGHT)
 	{
 		j = 0;
@@ -100,6 +99,7 @@ void	tranform_to_img(t_fdf *fdf)
 			pixel = (unsigned int *)(fdf->img.pixels_ptr + (i
 						* fdf->img.line_length + j * (fdf->img.bpp / 8)));
 			over_bg = fdf->framebuffer[i * WIDTH + j];
+			// over_bg = blend_pixel(over_bg, black);
 			*pixel = get_rgb(fdf->img.endian, over_bg.r,
 					over_bg.g, over_bg.b);
 			j++;
@@ -181,10 +181,12 @@ void	render(t_fdf *fdf)
 	t_pixel	red = get_pixel(get_argb(255, 255, 0, 0));
 	t_pixel	green = get_pixel(get_argb(255, 0, 255, 0));
 	t_pixel	blue = get_pixel(get_argb(255, 0, 0, 255));
+
 	(void)red;
 	(void)green;
 	(void)blue;
 
+	clear_framebuffer(fdf);
 	// draw_circle(fdf, WIDTH / 2 - 50 + fdf->camera.offset.x, HEIGHT / 2 - 50 + fdf->camera.offset.y, 100, red);
 	// draw_circle(fdf, WIDTH / 2 + 50 + fdf->camera.offset.x, HEIGHT / 2 - 50 + fdf->camera.offset.y, 100, green);
 	// draw_circle(fdf, WIDTH / 2 + fdf->camera.offset.x, HEIGHT / 2 + 50 + fdf->camera.offset.y, 100, blue);
@@ -194,5 +196,4 @@ void	render(t_fdf *fdf)
 	mlx_clear_window(fdf->connection, fdf->window);
 	mlx_put_image_to_window(fdf->connection, fdf->window,
 		fdf->img.img_ptr, 0, 0);
-	clear_framebuffer(fdf);
 }
