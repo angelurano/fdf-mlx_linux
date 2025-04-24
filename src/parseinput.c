@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/07 12:04:51 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 01:33:53 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,27 +40,27 @@ t_list	*read_file(int fd)
 	return (head);
 }
 
-u_int32_t	parse_color(char *value)
+t_color	parse_color(char *value)
 {
-	uint32_t	color;
-	size_t		len;
+	t_color	color;
+	size_t	len;
 
-	color = get_argb(255, 255, 255, 255);
+	color = color_argb(255, 255, 255, 255);
 	if (value == NULL)
 		return (color);
 	len = 0;
 	while (value[len + 2] && value[len + 2] != ' ')
 		len++;
 	if (len == 6)
-		color = get_argb(255, hex_to_dec(value, 2),
+		color = color_argb(255, hex_to_dec(value, 2),
 				hex_to_dec(value + 2, 2), hex_to_dec(value + 4, 2));
 	else if (len == 4)
-		color = get_argb(255, 0, hex_to_dec(value, 2),
+		color = color_argb(255, 0, hex_to_dec(value, 2),
 				hex_to_dec(value + 2, 2));
 	else if (len == 2)
-		color = get_argb(255, 0, 0, hex_to_dec(value, 2));
+		color = color_argb(255, 0, 0, hex_to_dec(value, 2));
 	else if (len == 3)
-		color = get_argb(255, hexchar_to_dec(value[0]),
+		color = color_argb(255, hexchar_to_dec(value[0]),
 				hexchar_to_dec(value[1]), hexchar_to_dec(value[2]));
 	return (color);
 }
@@ -69,7 +69,7 @@ size_t	parse_value(t_fdf *fdf, char *value, float x, float y)
 {
 	long long	z_ll;
 	size_t		val_len;
-	t_point		point;
+	t_vertex	point;
 	char		*comma;
 
 	val_len = is_valid_value(value);
@@ -78,12 +78,12 @@ size_t	parse_value(t_fdf *fdf, char *value, float x, float y)
 	z_ll = ft_atoll(value);
 	if (z_ll < -2147483648 || z_ll > 2147483647)
 		return (ft_printf_error("Invalid .fdf file format\n"), 0);
-	point.coord = (t_vector3){x, y, (float)z_ll};
+	point.coord = (t_vec3){x, y, (float)z_ll};
 	comma = ft_strchr(value, ',');
 	if (comma != NULL)
 		point.color = parse_color(comma);
 	else
-		point.color = get_argb(255, 255, 255, 255);
+		point.color = color_argb(255, 255, 255, 255);
 	if (ft_dynarradd(fdf->points.buffer, &point) == 0)
 		return (ft_printf_error("Error malloc\n"), 0);
 	return (val_len);
@@ -132,7 +132,7 @@ int	parse_input(t_fdf *fdf, char *filename)
 	file = read_file(fd);
 	if (file == NULL && (ft_close(&fd) || 1))
 		return (1);
-	fdf->points.buffer = ft_dynarrinit(128, sizeof(t_point));
+	fdf->points.buffer = ft_dynarrinit(128, sizeof(t_vertex));
 	if (fdf->points.buffer == NULL)
 		return (ft_lstclear(&file, free), 1);
 	fdf->points.lines = 0;

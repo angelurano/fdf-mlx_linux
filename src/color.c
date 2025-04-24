@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 08:29:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/21 19:18:31 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 01:41:22 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ uint8_t	blend_channel_gc(uint8_t fg, uint8_t bg, float a_fg)
 	return ((uint8_t)(pow(linear_color, 1 / alpha) * 255.0f + 0.5f));
 }
 
-t_pixel	blend_pixel(t_pixel fg, t_pixel bg)
+t_color	blend_pixel(t_color fg, t_color bg)
 {
-	t_pixel	out;
+	t_color	out;
 	float	a_fg;
 	float	a_bg;
 	float	a_out;
@@ -51,9 +51,9 @@ t_pixel	blend_pixel(t_pixel fg, t_pixel bg)
 	return (out);
 }
 
-t_pixel	apply_opacity(t_pixel color, float intensity)
+t_color	set_opacity(t_color color, float intensity)
 {
-	t_pixel	out;
+	t_color	out;
 
 	out.r = color.r;
 	out.g = color.g;
@@ -67,9 +67,9 @@ t_pixel	apply_opacity(t_pixel color, float intensity)
 	return (out);
 }
 
-t_pixel	lerp_color(t_pixel a, t_pixel b, float t)
+t_color	lerp_color(t_color a, t_color b, float t)
 {
-	t_pixel	out;
+	t_color	out;
 
 	out.r = (uint8_t)(a.r + (b.r - a.r) * t + 0.5f);
 	out.g = (uint8_t)(a.g + (b.g - a.g) * t + 0.5f);
@@ -83,46 +83,34 @@ t_pixel	lerp_color(t_pixel a, t_pixel b, float t)
 	return (out);
 }
 
-void	swap_colors(t_pixel *a, t_pixel *b)
+void	swap_colors(t_color *a, t_color *b)
 {
-	t_pixel	tmp;
+	t_color	tmp;
 
 	tmp = *a;
 	*a = *b;
 	*b = tmp;
 }
 
-/*
-t_pixel	blend_pixel(t_pixel fg, t_pixel bg)
-{
-	t_pixel	out;
-	float	alpha_out;
-
-	alpha_out = fg.a + bg.a * (1.0f - fg.a);
-	if (alpha_out == 0.0f)
-	{
-		out.r = 0;
-		out.g = 0;
-		out.b = 0;
-		out.a = 0;
-		return (out);
-	}
-	out.r = (fg.r * fg.a + bg.r * bg.a * (1.0f - fg.a)) / alpha_out;
-	out.g = (fg.g * fg.a + bg.g * bg.a * (1.0f - fg.a)) / alpha_out;
-	out.b = (fg.b * fg.a + bg.b * bg.a * (1.0f - fg.a)) / alpha_out;
-	out.a = alpha_out;
-	return (out);
-}
-*/
-
 uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
 {
 	return ((a << 24) | (r << 16) | (g << 8) | b);
 }
 
-t_pixel	get_pixel(uint32_t color)
+t_color	color_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
 {
-	t_pixel	out;
+	t_color	out;
+
+	out.a = a;
+	out.r = r;
+	out.g = g;
+	out.b = b;
+	return (out);
+}
+
+t_color	get_color(uint32_t color)
+{
+	t_color	out;
 
 	//out.a = ((color >> 24) & 0xFF) / 255.0f;
 	out.a = (color >> 24) & 0xFF;

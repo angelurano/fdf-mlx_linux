@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/18 19:28:38 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 02:14:57 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,69 +45,63 @@
 #  define M_PI_4 0.78539816339744830962
 # endif
 
-typedef struct s_vector2
+// TODO: change structs
+typedef struct s_vec2
 {
 	float	x;
 	float	y;
-}				t_vector2;
+	float	depth;
+}				t_vec2;
 
-typedef struct s_vector3
+typedef struct s_vec3
 {
 	float	x;
 	float	y;
 	float	z;
-}				t_vector3;
+}				t_vec3;
 
-typedef struct s_point
-{
-	t_vector3	coord;
-	uint32_t	color;
-}				t_point;
-
-typedef struct s_pixel
+typedef struct s_color
 {
 	uint8_t	b;
 	uint8_t	g;
 	uint8_t	r;
 	uint8_t	a;
-}				t_pixel;
-/*
-typedef struct s_pixel
-{
-	t_color	color;
-}				t_pixel;
-*/
-typedef struct s_framebuffer
-{
-	t_pixel	*buffer;
-	size_t	width;
-	size_t	height;
-}				t_framebuffer;
+}				t_color;
 
-typedef struct s_points
+typedef struct s_vertex
+{
+	t_vec3	coord;
+	t_vec2	screen;
+	t_color	color;
+}				t_vertex;
+
+// t_dynarr points to t_vertex
+typedef struct s_mesh
 {
 	t_dynarr	*buffer;
 	size_t		lines;
 	size_t		line_length;
-}				t_points;
+}				t_mesh;
 
-typedef struct s_img
+typedef struct s_mlx_img
 {
 	void	*img_ptr;
 	char	*pixels_ptr;
 	int		bpp;
-	int		endian;
 	int		line_length;
-}				t_img;
+	int		endian;
+}				t_mlx_img;
 
+// ! For bonus
 typedef struct s_camera
 {
-	float		zoom;
-	float		z_scale;
-	t_vector3	offset;
-	float		rot_x;
-	float		rot_y;
-	float		rot_z;
+	// Also add type of projection
+	float	rot_x;
+	float	rot_y;
+	float	rot_z;
+	float	zoom;
+	float	z_scale;
+	t_vec3	offset;
 }		t_camera;
 
 typedef struct s_input
@@ -120,13 +114,13 @@ typedef struct s_input
 
 typedef struct s_fdf
 {
-	void		*connection;
-	void		*window;
-	t_pixel		*framebuffer; // TODO
-	t_img		img;
-	t_points	points;
-	t_camera	camera;
-	t_input		input;
+	void			*connection;
+	void			*window;
+	t_color			*framebuffer; // framebuffer is 1D with width * height
+	t_mlx_img		img;
+	t_mesh			points;
+	t_camera		camera;
+	t_input			input;
 }				t_fdf;
 
 int			is_valid_filename(char *filename);
@@ -143,11 +137,12 @@ float		frac_part(float x);
 
 uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b);
 unsigned int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b);
-t_pixel		get_pixel(uint32_t color);
-t_pixel		blend_pixel(t_pixel fg, t_pixel bg);
-t_pixel		apply_opacity(t_pixel color, float intensity);
-t_pixel		lerp_color(t_pixel a, t_pixel b, float t);
-void		swap_colors(t_pixel *a, t_pixel *b);
+t_color		get_color(uint32_t color);
+t_color		color_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b);
+t_color		blend_pixel(t_color fg, t_color bg);
+t_color		set_opacity(t_color color, float intensity);
+t_color		lerp_color(t_color a, t_color b, float t);
+void		swap_colors(t_color *a, t_color *b);
 
 int			close_handler(t_fdf *fdf);
 int			key_press_handler(int keysym, t_fdf *fdf);
@@ -155,7 +150,7 @@ int			key_release_handler(int keysym, t_fdf *fdf);
 int			loop_handler(t_fdf *fdf);
 
 t_list		*read_file(int fd);
-u_int32_t	parse_color(char *value);
+t_color		parse_color(char *value);
 size_t		parse_value(t_fdf *fdf, char *value, float x, float y);
 int			parse_line(t_fdf *fdf, char *line, int index);
 int			parse_input(t_fdf *fdf, char *filename);
@@ -164,8 +159,37 @@ void		null_set_fdf(t_fdf *fdf);
 void		init_data(t_fdf *fdf);
 int			init_fdf(t_fdf *fdf);
 
-void		plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_pixel color);
-void		draw_line(t_fdf *fdf, t_vector2 p0, t_vector2 p1, t_pixel c0, t_pixel c1);
+void		plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_color color);
+
+typedef struct s_wu_line
+{
+	t_color	c0;
+	t_color	c1;
+	int		is_steep;
+	float	x0s;
+	float	y0s;
+	float	x1s;
+	float	y1s;
+	int		x_pixel1;
+	int		y_pixel1;
+	int		x_pixel2;
+	int		y_pixel2;
+	float	dx;
+	float	dy;
+	float	gradient;
+	float	intery;
+	float	xgap;
+	float	xgap2;
+	float	yend;
+	float	yend2;
+	int		x;
+	int		y;
+	int		max_x;
+	int		min_x;
+	int		min_y;
+}	t_wu_line;
+
+void	draw_line(t_fdf *fdf, t_vec2 p0, t_vec2 p1, t_color c0, t_color c1);
 
 void		render(t_fdf *fdf);
 void		clear_framebuffer(t_fdf *fdf);
