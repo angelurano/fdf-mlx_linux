@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 01:33:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:40:30 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,21 @@ t_color	parse_color(char *value)
 	color = color_argb(255, 255, 255, 255);
 	if (value == NULL)
 		return (color);
+	value++;
 	len = 0;
-	while (value[len + 2] && value[len + 2] != ' ')
+	while (*value && value[len + 2] && value[len + 2] != ' ')
 		len++;
 	if (len == 6)
-		color = color_argb(255, hex_to_dec(value, 2),
-				hex_to_dec(value + 2, 2), hex_to_dec(value + 4, 2));
+		color = color_argb(255, hex_to_dec(value + 2, 2),
+				hex_to_dec(value + 4, 2), hex_to_dec(value + 6, 2));
 	else if (len == 4)
-		color = color_argb(255, 0, hex_to_dec(value, 2),
-				hex_to_dec(value + 2, 2));
+		color = color_argb(255, 0, hex_to_dec(value + 2, 2),
+				hex_to_dec(value + 4, 2));
 	else if (len == 2)
-		color = color_argb(255, 0, 0, hex_to_dec(value, 2));
+		color = color_argb(255, 0, 0, hex_to_dec(value + 2, 2));
 	else if (len == 3)
-		color = color_argb(255, hexchar_to_dec(value[0]),
-				hexchar_to_dec(value[1]), hexchar_to_dec(value[2]));
+		color = color_argb(255, hexchar_to_dec(value[2]),
+				hexchar_to_dec(value[3]), hexchar_to_dec(value[4]));
 	return (color);
 }
 
@@ -146,47 +147,3 @@ int	parse_input(t_fdf *fdf, char *filename)
 	}
 	return (ft_lstclear(&file, free), 0);
 }
-
-/*
-int	parse_line(t_fdf *fdf, char *line)
-{
-
-	char	**split;
-	size_t	i;
-	t_point	*points;
-
-	// Bad format map error: "Invalid .fdf file format"
-	// TODO: Check if the line has the same number of elements with a function of checkinput.c
-	// TODO: Finally check if points lines is more than 0
-	// TODO: Check for each point if the values are valid, in my case, I will check if the values are numbers, af i we got a color too (split(",")), check if the value is hexadecimal (0x)
-}
-
-int	read_file(t_fdf *fdf, char *filename)
-{
-	int			fd;
-	char		*line;
-	ssize_t		bytes_read;
-	char		*dot;
-
-	dot = ft_strrchr(filename, '.');
-	if (dot == NULL || ft_strcmp(dot, ".fdf") != 0)
-		return (ft_printf_error("Invalid file extension\n"), 1);
-
-	if (fd == -1)
-		return (ft_printf_error("Error opening file\n"), 1);
-	line = NULL;
-	while (1)
-	{
-		bytes_read = get_next_line(fd, &line);
-		if (bytes_read == -1)
-			return (ft_printf_error("Error reading file\n"),
-				ft_freestr(&line), close(fd), 1);
-		if (bytes_read == 0)
-			break ;
-		if (parse_line(fdf, line))
-			return (ft_freestr(&line), close(fd), 1);
-		ft_freestr(&line);
-	}
-	return (ft_freestr(&line), close(fd), 0);
-}
-*/

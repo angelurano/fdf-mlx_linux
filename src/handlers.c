@@ -6,13 +6,13 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 17:27:54 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/09 23:56:06 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 04:26:18 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-
+/* // ! For bonus
 int	key_release_handler(int keysym, t_fdf *fdf)
 {
 	if (keysym == XK_Up)
@@ -25,11 +25,13 @@ int	key_release_handler(int keysym, t_fdf *fdf)
 		fdf->input.key_right = 0;
 	return (0);
 }
+*/
 
 int	key_press_handler(int keysym, t_fdf *fdf)
 {
 	if (keysym == XK_Escape)
 		return (close_handler(fdf));
+	/* // ! For bonus
 	if (keysym == XK_Up)
 		fdf->input.key_up = 1;
 	else if (keysym == XK_Down)
@@ -38,9 +40,11 @@ int	key_press_handler(int keysym, t_fdf *fdf)
 		fdf->input.key_left = 1;
 	else if (keysym == XK_Right)
 		fdf->input.key_right = 1;
+	*/
 	return (0);
 }
 
+/* // ! For bonus
 int	loop_handler(t_fdf *fdf)
 {
 	int	must_render; // TODO: remove this variable, use a flag or something instead
@@ -70,6 +74,7 @@ int	loop_handler(t_fdf *fdf)
 		render(fdf);
 	return (0);
 }
+*/
 
 int	close_handler(t_fdf *fdf)
 {

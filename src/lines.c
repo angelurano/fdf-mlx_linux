@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 09:53:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 01:57:50 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 13:47:21 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,16 +126,15 @@ static void	draw_last_endpoint(t_fdf *fdf, t_wu_line *line)
 	}
 }
 
-// TODO: solve n of params and names, probably must change color type and pixels for include coords
-// Probably change to t_vertex
-void	draw_line(t_fdf *fdf, t_vec2 p0, t_vec2 p1, t_color c0, t_color c1)
+void	draw_line(t_fdf *fdf, t_vertex v0, t_vertex v1)
 {
 	t_wu_line	line;
 
-	line.c0 = c0;
-	line.c1 = c1;
-	line.is_steep = fabsf(p1.y - p0.y) > fabsf(p1.x - p0.x);
-	set_wu_line(&line, p0, p1);
+	line.c0 = v0.color;
+	line.c1 = v1.color;
+	line.is_steep = fabsf(v1.screen.y - v0.screen.y)
+		> fabsf(v1.screen.x - v0.screen.x);
+	set_wu_line(&line, v0.screen, v1.screen);
 	draw_first_endpoint(fdf, &line);
 	line.intery = line.yend + line.gradient;
 	line.min_x = line.x_pixel1 + 1;

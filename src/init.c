@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:36:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 01:40:15 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 05:11:15 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,25 @@ void	null_set_fdf(t_fdf *fdf)
 	fdf->points.line_length = 0;
 }
 
+// it's called init because only occurs once, but it clears the framebuffer
+void	init_framebuffer(t_fdf *fdf)
+{
+	int	i;
+
+	i = 0;
+	while (i < WIDTH * HEIGHT)
+	{
+		fdf->framebuffer[i].r = 0;
+		fdf->framebuffer[i].g = 0;
+		fdf->framebuffer[i].b = 0;
+		fdf->framebuffer[i].a = 255;
+		i++;
+	}
+}
+
+/* // ! For bonus
 void	init_data(t_fdf *fdf)
 {
-	clear_framebuffer(fdf);
 	fdf->camera.zoom = 1.0;
 	fdf->camera.z_scale = 1.0;
 	fdf->camera.offset.x = 0.0;
@@ -42,6 +58,7 @@ void	init_data(t_fdf *fdf)
 	fdf->input.key_right = 0;
 	fdf->input.key_up = 0;
 }
+*/
 
 void	init_events(t_fdf *fdf)
 {
@@ -51,18 +68,20 @@ void	init_events(t_fdf *fdf)
 		key_press_handler,
 		fdf);
 	mlx_hook(fdf->window,
-		KeyRelease,
-		KeyReleaseMask,
-		key_release_handler,
-		fdf);
-	mlx_hook(fdf->window,
 		DestroyNotify,
 		StructureNotifyMask,
 		close_handler,
 		fdf);
+	/* // ! For bonus
+	mlx_hook(fdf->window,
+		KeyRelease,
+		KeyReleaseMask,
+		key_release_handler,
+		fdf);
 	mlx_loop_hook(fdf->connection,
 		loop_handler,
 		fdf);
+	*/
 }
 
 int	init_fdf(t_fdf *fdf)
@@ -86,7 +105,6 @@ int	init_fdf(t_fdf *fdf)
 	fdf->window = mlx_new_window(fdf->connection, WIDTH, HEIGHT, "FDF");
 	if (fdf->window == NULL)
 		return (ft_printf_error("Error creating window\n"), mlx_destroy_image(fdf->connection, fdf->img.img_ptr), free(fdf->connection), mlx_destroy_display(fdf->connection), free(fdf->framebuffer), 1);
-	init_data(fdf);
 	init_events(fdf);
 	return (0);
 }

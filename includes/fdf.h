@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 02:14:57 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/24 04:54:09 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,10 @@
 #  define M_PI_4 0.78539816339744830962
 # endif
 
-// TODO: change structs
 typedef struct s_vec2
 {
 	float	x;
 	float	y;
-	float	depth;
 }				t_vec2;
 
 typedef struct s_vec3
@@ -92,26 +90,6 @@ typedef struct s_mlx_img
 	int		endian;
 }				t_mlx_img;
 
-// ! For bonus
-typedef struct s_camera
-{
-	// Also add type of projection
-	float	rot_x;
-	float	rot_y;
-	float	rot_z;
-	float	zoom;
-	float	z_scale;
-	t_vec3	offset;
-}		t_camera;
-
-typedef struct s_input
-{
-	char	key_up;
-	char	key_down;
-	char	key_left;
-	char	key_right;
-}				t_input;
-
 typedef struct s_fdf
 {
 	void			*connection;
@@ -119,8 +97,6 @@ typedef struct s_fdf
 	t_color			*framebuffer; // framebuffer is 1D with width * height
 	t_mlx_img		img;
 	t_mesh			points;
-	t_camera		camera;
-	t_input			input;
 }				t_fdf;
 
 int			is_valid_filename(char *filename);
@@ -146,8 +122,6 @@ void		swap_colors(t_color *a, t_color *b);
 
 int			close_handler(t_fdf *fdf);
 int			key_press_handler(int keysym, t_fdf *fdf);
-int			key_release_handler(int keysym, t_fdf *fdf);
-int			loop_handler(t_fdf *fdf);
 
 t_list		*read_file(int fd);
 t_color		parse_color(char *value);
@@ -156,10 +130,12 @@ int			parse_line(t_fdf *fdf, char *line, int index);
 int			parse_input(t_fdf *fdf, char *filename);
 
 void		null_set_fdf(t_fdf *fdf);
-void		init_data(t_fdf *fdf);
+void		init_framebuffer(t_fdf *fdf);
 int			init_fdf(t_fdf *fdf);
 
 void		plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_color color);
+
+void		project_vertex_iso(t_vertex *point);
 
 typedef struct s_wu_line
 {
@@ -189,9 +165,8 @@ typedef struct s_wu_line
 	int		min_y;
 }	t_wu_line;
 
-void	draw_line(t_fdf *fdf, t_vec2 p0, t_vec2 p1, t_color c0, t_color c1);
+void		draw_line(t_fdf *fdf, t_vertex v0, t_vertex v1);
 
 void		render(t_fdf *fdf);
-void		clear_framebuffer(t_fdf *fdf);
 
 #endif
