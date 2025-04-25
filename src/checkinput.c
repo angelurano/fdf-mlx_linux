@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 02:39:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/07 12:00:32 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/25 21:21:53 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,19 +52,26 @@ int	is_number(char *str)
 {
 	size_t	i;
 	size_t	len;
+	int		zero_flag;
 
 	i = 0;
 	if (str == NULL || str[i] == '\0')
 		return (0);
 	if (str[i] == '-' || str[i] == '+')
 		i++;
+	zero_flag = 0;
+	while (str[i] && str[i] == '0')
+	{
+		zero_flag = 1;
+		i++;
+	}
 	len = 0;
 	while (str[i] && ft_isdigit(str[i]))
 	{
 		len++;
 		i++;
 	}
-	if (len == 0 || len > 10)
+	if ((!zero_flag && len == 0) || len > 10)
 		return (0);
 	return (i);
 }

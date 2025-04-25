@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 14:40:30 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/25 23:45:48 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,13 @@ t_color	parse_color(char *value)
 	return (color);
 }
 
-size_t	parse_value(t_fdf *fdf, char *value, float x, float y)
+size_t	parse_value(t_fdf *fdf, char *value, float index, float count)
 {
 	long long	z_ll;
 	size_t		val_len;
 	t_vertex	point;
 	char		*comma;
+	float		space;
 
 	val_len = is_valid_value(value);
 	if (val_len == 0)
@@ -79,7 +80,10 @@ size_t	parse_value(t_fdf *fdf, char *value, float x, float y)
 	z_ll = ft_atoll(value);
 	if (z_ll < -2147483648 || z_ll > 2147483647)
 		return (ft_printf_error("Invalid .fdf file format\n"), 0);
-	point.coord = (t_vec3){x, y, (float)z_ll};
+	space = 10.0f;
+	point.coord.x = index * space;
+	point.coord.y = (count - 1) * space;
+	point.coord.z = (float)z_ll;
 	comma = ft_strchr(value, ',');
 	if (comma != NULL)
 		point.color = parse_color(comma);
