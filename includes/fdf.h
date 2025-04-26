@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 04:54:09 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 01:24:11 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ int			hex_to_dec(char *str, int len);
 int			roundf_to_int(float x);
 float		frac_part(float x);
 
+int			hexchar_color(char c);
 uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b);
 unsigned int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b);
 t_color		get_color(uint32_t color);

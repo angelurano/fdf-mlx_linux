@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/25 23:45:48 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 00:55:42 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ t_color	parse_color(char *value)
 		return (color);
 	value++;
 	len = 0;
-	while (*value && value[len + 2] && value[len + 2] != ' ')
+	while (*value && value[len + 2] && value[len + 2] != ' '
+		&& value[len + 2] != '\n')
 		len++;
 	if (len == 6)
 		color = color_argb(255, hex_to_dec(value + 2, 2),
@@ -61,8 +62,8 @@ t_color	parse_color(char *value)
 	else if (len == 2)
 		color = color_argb(255, 0, 0, hex_to_dec(value + 2, 2));
 	else if (len == 3)
-		color = color_argb(255, hexchar_to_dec(value[2]),
-				hexchar_to_dec(value[3]), hexchar_to_dec(value[4]));
+		color = color_argb(255, hexchar_color(value[2]),
+				hexchar_color(value[3]), hexchar_color(value[4]));
 	return (color);
 }
 
@@ -84,8 +85,8 @@ size_t	parse_value(t_fdf *fdf, char *value, float index, float count)
 	point.coord.x = index * space;
 	point.coord.y = (count - 1) * space;
 	point.coord.z = (float)z_ll;
-	comma = ft_strchr(value, ',');
-	if (comma != NULL)
+	comma = ft_strnchr(value, ',', val_len);
+	if (comma != NULL && comma)
 		point.color = parse_color(comma);
 	else
 		point.color = color_argb(255, 255, 255, 255);

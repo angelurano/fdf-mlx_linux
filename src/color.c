@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 08:29:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 01:41:22 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/27 01:22:11 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,17 @@ void	swap_colors(t_color *a, t_color *b)
 	tmp = *a;
 	*a = *b;
 	*b = tmp;
+}
+
+int	hexchar_color(char c)
+{
+	int	dec;
+
+	dec = hexchar_to_dec(c);
+	if (dec <= 0 || dec > 15)
+		return (0);
+	dec++;
+	return (dec * dec - 1);
 }
 
 uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b)
