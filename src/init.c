@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:36:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 05:11:15 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 21:42:54 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,41 +24,14 @@ void	null_set_fdf(t_fdf *fdf)
 	fdf->points.buffer = NULL;
 	fdf->points.lines = 0;
 	fdf->points.line_length = 0;
+	// ---
+	fdf->zoom.offset.x = 0;
+	fdf->zoom.offset.y = 0;
+	fdf->zoom.value = 1.0f;
+	fdf->zoom.factor = 1.05f;
+	fdf->zoom.key_in = 0;
+	fdf->zoom.key_out = 0;
 }
-
-// it's called init because only occurs once, but it clears the framebuffer
-void	init_framebuffer(t_fdf *fdf)
-{
-	int	i;
-
-	i = 0;
-	while (i < WIDTH * HEIGHT)
-	{
-		fdf->framebuffer[i].r = 0;
-		fdf->framebuffer[i].g = 0;
-		fdf->framebuffer[i].b = 0;
-		fdf->framebuffer[i].a = 255;
-		i++;
-	}
-}
-
-/* // ! For bonus
-void	init_data(t_fdf *fdf)
-{
-	fdf->camera.zoom = 1.0;
-	fdf->camera.z_scale = 1.0;
-	fdf->camera.offset.x = 0.0;
-	fdf->camera.offset.y = 0.0;
-	fdf->camera.offset.z = 0.0;
-	fdf->camera.rot_x = 0.0;
-	fdf->camera.rot_y = 0.0;
-	fdf->camera.rot_z = 0.0;
-	fdf->input.key_down = 0;
-	fdf->input.key_left = 0;
-	fdf->input.key_right = 0;
-	fdf->input.key_up = 0;
-}
-*/
 
 void	init_events(t_fdf *fdf)
 {
@@ -72,7 +45,6 @@ void	init_events(t_fdf *fdf)
 		StructureNotifyMask,
 		close_handler,
 		fdf);
-	/* // ! For bonus
 	mlx_hook(fdf->window,
 		KeyRelease,
 		KeyReleaseMask,
@@ -81,7 +53,6 @@ void	init_events(t_fdf *fdf)
 	mlx_loop_hook(fdf->connection,
 		loop_handler,
 		fdf);
-	*/
 }
 
 int	init_fdf(t_fdf *fdf)
@@ -108,3 +79,43 @@ int	init_fdf(t_fdf *fdf)
 	init_events(fdf);
 	return (0);
 }
+
+/* // ! For bonus
+void	init_data(t_fdf *fdf)
+{
+	fdf->camera.zoom = 1.0;
+	fdf->camera.z_scale = 1.0;
+	fdf->camera.offset.x = 0.0;
+	fdf->camera.offset.y = 0.0;
+	fdf->camera.offset.z = 0.0;
+	fdf->camera.rot_x = 0.0;
+	fdf->camera.rot_y = 0.0;
+	fdf->camera.rot_z = 0.0;
+	fdf->input.key_down = 0;
+	fdf->input.key_left = 0;
+	fdf->input.key_right = 0;
+	fdf->input.key_up = 0;
+}
+
+void	init_events(t_fdf *fdf)
+{
+	mlx_hook(fdf->window,
+		KeyPress,
+		KeyPressMask,
+		key_press_handler,
+		fdf);
+	mlx_hook(fdf->window,
+		DestroyNotify,
+		StructureNotifyMask,
+		close_handler,
+		fdf);
+	mlx_hook(fdf->window,
+		KeyRelease,
+		KeyReleaseMask,
+		key_release_handler,
+		fdf);
+	mlx_loop_hook(fdf->connection,
+		loop_handler,
+		fdf);
+}
+*/

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:20:37 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/09 18:11:35 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/29 20:56:38 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	main(int argc, char *argv[])
 			ft_dynarrfree(&fdf.points.buffer, NULL), 1);
 	// Create a new buffer with the size of the image, with info about rgba for each pixel
 	// This buffer isn't the final image, it's a buffer to draw the image with alpha info per pixel
+	init_zoom(&fdf);
+	apply_transform(&fdf);
 	render(&fdf);
 	mlx_loop(fdf.connection);
 	close_handler(&fdf);

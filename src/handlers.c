@@ -6,11 +6,55 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 17:27:54 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 04:26:18 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:21:16 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int	key_release_handler(int keysym, t_fdf *fdf)
+{
+	if (keysym == XK_plus)
+		fdf->zoom.key_in = 0;
+	else if (keysym == XK_minus)
+		fdf->zoom.key_out = 0;
+	return (0);
+}
+
+int	key_press_handler(int keysym, t_fdf *fdf)
+{
+	if (keysym == XK_Escape)
+		return (close_handler(fdf));
+	else if (keysym == XK_plus)
+		fdf->zoom.key_in = 1;
+	else if (keysym == XK_minus)
+		fdf->zoom.key_out = 1;
+	return (0);
+}
+
+// TODO: setters(?)
+int	loop_handler(t_fdf *fdf)
+{
+	if (fdf->zoom.key_in && fdf->zoom.key_out)
+		return (0);
+	else if (fdf->zoom.key_in)
+		zoom_center(fdf, fdf->zoom.value * fdf->zoom.factor);
+	else if (fdf->zoom.key_out)
+		zoom_center(fdf, fdf->zoom.value / fdf->zoom.factor);
+	return (0);
+}
+
+int	close_handler(t_fdf *fdf)
+{
+	free(fdf->framebuffer);
+	mlx_destroy_window(fdf->connection, fdf->window);
+	mlx_destroy_image(fdf->connection, fdf->img.img_ptr);
+	mlx_destroy_display(fdf->connection);
+	free(fdf->connection);
+	ft_dynarrfree(&fdf->points.buffer, NULL);
+	exit(0);
+	return (0);
+}
 
 /* // ! For bonus
 int	key_release_handler(int keysym, t_fdf *fdf)
@@ -25,13 +69,11 @@ int	key_release_handler(int keysym, t_fdf *fdf)
 		fdf->input.key_right = 0;
 	return (0);
 }
-*/
 
 int	key_press_handler(int keysym, t_fdf *fdf)
 {
 	if (keysym == XK_Escape)
 		return (close_handler(fdf));
-	/* // ! For bonus
 	if (keysym == XK_Up)
 		fdf->input.key_up = 1;
 	else if (keysym == XK_Down)
@@ -40,11 +82,9 @@ int	key_press_handler(int keysym, t_fdf *fdf)
 		fdf->input.key_left = 1;
 	else if (keysym == XK_Right)
 		fdf->input.key_right = 1;
-	*/
 	return (0);
 }
 
-/* // ! For bonus
 int	loop_handler(t_fdf *fdf)
 {
 	int	must_render; // TODO: remove this variable, use a flag or something instead
@@ -76,14 +116,3 @@ int	loop_handler(t_fdf *fdf)
 }
 */
 
-int	close_handler(t_fdf *fdf)
-{
-	free(fdf->framebuffer);
-	mlx_destroy_window(fdf->connection, fdf->window);
-	mlx_destroy_image(fdf->connection, fdf->img.img_ptr);
-	mlx_destroy_display(fdf->connection);
-	free(fdf->connection);
-	ft_dynarrfree(&fdf->points.buffer, NULL);
-	exit(0);
-	return (0);
-}

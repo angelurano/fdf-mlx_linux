@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/27 01:24:11 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 16:20:27 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@
 
 # define HEIGHT 800
 # define WIDTH 1000
+
+# ifndef FLT_MAX
+#  define FLT_MAX 3.40282347e+38F
+# endif
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -69,6 +73,7 @@ typedef struct s_color
 typedef struct s_vertex
 {
 	t_vec3	coord;
+	t_vec2	iso;
 	t_vec2	screen;
 	t_color	color;
 }				t_vertex;
@@ -90,6 +95,15 @@ typedef struct s_mlx_img
 	int		endian;
 }				t_mlx_img;
 
+typedef struct z_zoom
+{
+	t_vec2	offset;
+	float	value;
+	float	factor;
+	char	key_in;
+	char	key_out;
+}				t_zoom;
+
 typedef struct s_fdf
 {
 	void			*connection;
@@ -97,6 +111,7 @@ typedef struct s_fdf
 	t_color			*framebuffer; // framebuffer is 1D with width * height
 	t_mlx_img		img;
 	t_mesh			points;
+	t_zoom			zoom;
 }				t_fdf;
 
 int			is_valid_filename(char *filename);
@@ -123,6 +138,8 @@ void		swap_colors(t_color *a, t_color *b);
 
 int			close_handler(t_fdf *fdf);
 int			key_press_handler(int keysym, t_fdf *fdf);
+int			key_release_handler(int keysym, t_fdf *fdf);
+int			loop_handler(t_fdf *fdf);
 
 t_list		*read_file(int fd);
 t_color		parse_color(char *value);
@@ -131,12 +148,16 @@ int			parse_line(t_fdf *fdf, char *line, int index);
 int			parse_input(t_fdf *fdf, char *filename);
 
 void		null_set_fdf(t_fdf *fdf);
-void		init_framebuffer(t_fdf *fdf);
 int			init_fdf(t_fdf *fdf);
 
 void		plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_color color);
 
-void		project_vertex_iso(t_vertex *point);
+void		apply_transform(t_fdf *fdf);
+t_vec2		project_iso(t_vec3 point);
+t_vec2		project_screen(t_zoom zoom, t_vec2 iso);
+
+void		init_zoom(t_fdf *fdf);
+void		zoom_center(t_fdf *fdf, float new_zoom);
 
 typedef struct s_wu_line
 {
@@ -168,6 +189,7 @@ typedef struct s_wu_line
 
 void		draw_line(t_fdf *fdf, t_vertex v0, t_vertex v1);
 
+void		clear_framebuffer(t_fdf *fdf);
 void		render(t_fdf *fdf);
 
 #endif
