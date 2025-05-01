@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/24 04:27:19 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/30 15:30:48 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 03:36:46 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ t_vec2	project_iso(t_vec3 point)
 
 	if (cos30 == 0 || sin30 == 0)
 	{
-		cos30 = cos(M_PI / 6);
-		sin30 = sin(M_PI / 6);
+		cos30 = cosf(M_PI / 6);
+		sin30 = sinf(M_PI / 6);
 	}
-	iso.x = - (point.x - point.y) * cos30;
-	iso.y = (point.x + point.y) * sin30 - point.z;
+	iso.x = -(-point.x - point.y) * cos30;
+	iso.y = (-point.x + point.y) * sin30 - point.z;
 	return (iso);
 }
 

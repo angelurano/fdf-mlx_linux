@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/05/01 02:07:04 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 03:44:38 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ size_t	parse_value(t_fdf *fdf, char *value, float index, float count)
 	if (z_ll < -2147483648 || z_ll > 2147483647)
 		return (ft_printf_error("Invalid .fdf file format\n"), 0);
 	space = 10.0f;
-	point.coord.x = index * space;
-	point.coord.y = (count - 1) * space;
+	point.coord.x = (count - 1) * space;
+	point.coord.y = index * space;
 	point.coord.z = (float)z_ll;
 	comma = ft_strnchr(value, ',', val_len);
-	if (comma != NULL && comma)
+	if (comma != NULL)
 		point.color = parse_color(comma);
 	else
 		point.color = color_rgba(255, 255, 255, 255);
