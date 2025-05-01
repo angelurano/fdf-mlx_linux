@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/30 20:33:48 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:44:00 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,6 @@ typedef struct s_fdf
 {
 	void			*connection;
 	void			*window;
-	// t_color			*framebuffer; // framebuffer is 1D with width * height
 	t_mlx_img		img;
 	t_mesh			points;
 	t_zoom			zoom;
@@ -119,22 +118,17 @@ int			is_valid_color(char *str);
 int			is_number(char *str);
 int			is_valid_value(char *str);
 
-float		rad_to_deg(float rad);
-float		deg_to_rad(float deg);
 int			hexchar_to_dec(char c);
 int			hex_to_dec(char *str, int len);
 int			roundf_to_int(float x);
 float		frac_part(float x);
+int			hexchar_color(char c);
 
 uint32_t	pack_color(int endian, t_color color);
 t_color		unpack_color(int endian, uint32_t packed);
 
 t_color		color_rgba(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
-int			hexchar_color(char c);
-uint32_t	get_argb(uint32_t a, uint32_t r, uint32_t g, uint32_t b);
-unsigned int	get_rgb(int endian, uint8_t r, uint8_t g, uint8_t b);
-t_color		get_color(uint32_t color);
 t_color		blend_pixel(t_color fg, t_color bg);
 t_color		set_opacity(t_color color, float intensity);
 t_color		lerp_color(t_color a, t_color b, float t);

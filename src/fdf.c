@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:20:37 by migugar2          #+#    #+#             */
-/*   Updated: 2025/05/01 02:07:24 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:59:31 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,6 @@ int	main(int argc, char *argv[])
 	if (init_fdf(&fdf))
 		return (ft_printf_error("Error initializing FDF\n"),
 			ft_dynarrfree(&fdf.points.buffer, NULL), 1);
-	// Create a new buffer with the size of the image, with info about rgba for each pixel
-	// This buffer isn't the final image, it's a buffer to draw the image with alpha info per pixel
-	// test_colors(&fdf);
 	init_zoom(&fdf);
 	apply_transform(&fdf);
 	render(&fdf);

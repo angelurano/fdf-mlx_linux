@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 02:39:27 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/25 21:21:53 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 17:03:00 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	is_valid_filename(char *filename)
 	dot = ft_strrchr(filename, '.');
 	if (dot == NULL)
 		return (0);
-	if (ft_strcmp(dot, ".fdf") != 0)
+	if (ft_strcmp(dot, ".fdf") != '\0')
 		return (0);
 	return (1);
 }

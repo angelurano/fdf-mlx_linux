@@ -6,21 +6,11 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:13:05 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/27 01:00:51 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 16:58:48 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-float	rad_to_deg(float rad)
-{
-	return (rad * (180.0 / M_PI));
-}
-
-float	deg_to_rad(float deg)
-{
-	return (deg * (M_PI / 180.0));
-}
 
 float	frac_part(float x)
 {
@@ -57,4 +47,15 @@ int	hex_to_dec(char *str, int len)
 		i++;
 	}
 	return (dec);
+}
+
+int	hexchar_color(char c)
+{
+	int	dec;
+
+	dec = hexchar_to_dec(c);
+	if (dec <= 0 || dec > 15)
+		return (0);
+	dec++;
+	return (dec * dec - 1);
 }

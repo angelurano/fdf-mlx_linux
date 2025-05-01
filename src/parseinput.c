@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/05/01 03:44:38 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:32:39 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ int	parse_input(t_fdf *fdf, char *filename)
 	if (fd == -1)
 		return (ft_printf_error("Error file open\n"), 1);
 	file = read_file(fd);
-	if (file == NULL && (ft_close(&fd) || 1))
+	if ((ft_close(&fd) || 1) && file == NULL)
 		return (1);
 	fdf->points.buffer = ft_dynarrinit(128, sizeof(t_vertex));
 	if (fdf->points.buffer == NULL)

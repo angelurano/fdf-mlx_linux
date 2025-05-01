@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 15:29:57 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/30 16:24:40 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:16:47 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,27 @@
 static void	get_mins_maxs(t_fdf *fdf, t_vec2 *min, t_vec2 *max)
 {
 	t_vertex	*v;
+	t_vertex	*tmp;
 	size_t		i;
 
 	min->x = FLT_MAX;
 	min->y = FLT_MAX;
 	max->x = -FLT_MAX;
 	max->y = -FLT_MAX;
+	v = ft_dynarrget(fdf->points.buffer, 0);
 	i = 0;
-	while (i < fdf->points.lines * fdf->points.line_length)
+	while (i < fdf->points.buffer->size)
 	{
-		v = ft_dynarrget(fdf->points.buffer, i);
-		v->iso = project_iso(v->coord);
-		if (v->iso.x < min->x)
-			min->x = v->iso.x;
-		if (v->iso.y < min->y)
-			min->y = v->iso.y;
-		if (v->iso.x > max->x)
-			max->x = v->iso.x;
-		if (v->iso.y > max->y)
-			max->y = v->iso.y;
+		tmp = v + i;
+		tmp->iso = project_iso(tmp->coord);
+		if (tmp->iso.x < min->x)
+			min->x = tmp->iso.x;
+		if (tmp->iso.y < min->y)
+			min->y = tmp->iso.y;
+		if (tmp->iso.x > max->x)
+			max->x = tmp->iso.x;
+		if (tmp->iso.y > max->y)
+			max->y = tmp->iso.y;
 		i++;
 	}
 }
@@ -82,4 +84,3 @@ void	zoom_center(t_fdf *fdf, float new_zoom)
 	apply_transform(fdf);
 	render(fdf);
 }
-
