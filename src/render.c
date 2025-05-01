@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:22:35 by migugar2          #+#    #+#             */
-/*   Updated: 2025/05/01 17:39:13 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:44:17 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_color color)
 }
 
 // TODO: optimize and draw in correct order
-void	draw(t_fdf *fdf)
+static void	draw(t_fdf *fdf)
 {
 	t_vertex	*v;
 	size_t		i;

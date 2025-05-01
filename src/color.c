@@ -6,13 +6,22 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 08:29:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/05/01 18:10:49 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 18:41:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-uint8_t	blend_channel_gc(uint8_t fg, uint8_t bg, float a_fg)
+void	swap_colors(t_color *a, t_color *b)
+{
+	t_color	tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
+}
+
+static uint8_t	blend_channel_gc(uint8_t fg, uint8_t bg, float a_fg)
 {
 	float	linear_fg;
 	float	linear_bg;
@@ -82,13 +91,4 @@ t_color	lerp_color(t_color a, t_color b, float t)
 	else
 		out.a = (uint8_t)(a.a + (b.a - a.a) * t + 0.5f);
 	return (out);
-}
-
-void	swap_colors(t_color *a, t_color *b)
-{
-	t_color	tmp;
-
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
 }
