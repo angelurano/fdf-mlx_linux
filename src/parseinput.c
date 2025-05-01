@@ -6,10 +6,9 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 11:43:14 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/27 00:55:42 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/01 02:07:04 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "fdf.h"
 
@@ -45,7 +44,7 @@ t_color	parse_color(char *value)
 	t_color	color;
 	size_t	len;
 
-	color = color_argb(255, 255, 255, 255);
+	color = color_rgba(255, 255, 255, 255);
 	if (value == NULL)
 		return (color);
 	value++;
@@ -54,16 +53,16 @@ t_color	parse_color(char *value)
 		&& value[len + 2] != '\n')
 		len++;
 	if (len == 6)
-		color = color_argb(255, hex_to_dec(value + 2, 2),
-				hex_to_dec(value + 4, 2), hex_to_dec(value + 6, 2));
+		color = color_rgba(hex_to_dec(value + 2, 2),
+				hex_to_dec(value + 4, 2), hex_to_dec(value + 6, 2), 255);
 	else if (len == 4)
-		color = color_argb(255, 0, hex_to_dec(value + 2, 2),
-				hex_to_dec(value + 4, 2));
+		color = color_rgba(0, hex_to_dec(value + 2, 2),
+				hex_to_dec(value + 4, 2), 255);
 	else if (len == 2)
-		color = color_argb(255, 0, 0, hex_to_dec(value + 2, 2));
+		color = color_rgba(0, 0, hex_to_dec(value + 2, 2), 255);
 	else if (len == 3)
-		color = color_argb(255, hexchar_color(value[2]),
-				hexchar_color(value[3]), hexchar_color(value[4]));
+		color = color_rgba(hexchar_color(value[2]),
+				hexchar_color(value[3]), hexchar_color(value[4]), 255);
 	return (color);
 }
 
@@ -89,7 +88,7 @@ size_t	parse_value(t_fdf *fdf, char *value, float index, float count)
 	if (comma != NULL && comma)
 		point.color = parse_color(comma);
 	else
-		point.color = color_argb(255, 255, 255, 255);
+		point.color = color_rgba(255, 255, 255, 255);
 	if (ft_dynarradd(fdf->points.buffer, &point) == 0)
 		return (ft_printf_error("Error malloc\n"), 0);
 	return (val_len);

@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:36:47 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/29 21:42:54 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:35:30 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,14 @@ int	init_fdf(t_fdf *fdf)
 		return (ft_printf_error("Error getting image data address\n"),
 			mlx_destroy_image(fdf->connection, fdf->img.img_ptr),
 			mlx_destroy_display(fdf->connection), free(fdf->connection), 1);
+	/*
 	fdf->framebuffer = malloc(sizeof(t_color) * WIDTH * HEIGHT);
 	if (fdf->framebuffer == NULL)
 		return (ft_printf_error("Error allocating framebuffer\n"), mlx_destroy_image(fdf->connection, fdf->img.img_ptr), mlx_destroy_display(fdf->connection), free(fdf->connection), 1);
+	*/
 	fdf->window = mlx_new_window(fdf->connection, WIDTH, HEIGHT, "FDF");
 	if (fdf->window == NULL)
-		return (ft_printf_error("Error creating window\n"), mlx_destroy_image(fdf->connection, fdf->img.img_ptr), free(fdf->connection), mlx_destroy_display(fdf->connection), free(fdf->framebuffer), 1);
+		return (ft_printf_error("Error creating window\n"), mlx_destroy_image(fdf->connection, fdf->img.img_ptr), free(fdf->connection), mlx_destroy_display(fdf->connection), /*free(fdf->framebuffer), */1);
 	init_events(fdf);
 	return (0);
 }

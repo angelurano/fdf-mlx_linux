@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 17:27:54 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/30 16:21:16 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/04/30 20:34:35 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	loop_handler(t_fdf *fdf)
 
 int	close_handler(t_fdf *fdf)
 {
-	free(fdf->framebuffer);
+	// free(fdf->framebuffer);
 	mlx_destroy_window(fdf->connection, fdf->window);
 	mlx_destroy_image(fdf->connection, fdf->img.img_ptr);
 	mlx_destroy_display(fdf->connection);
