@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:22:35 by migugar2          #+#    #+#             */
-/*   Updated: 2025/05/01 18:44:17 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/03 01:26:42 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,28 +49,26 @@ void	plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_color color)
 			blend_pixel(color, bg_color));
 }
 
-// TODO: optimize and draw in correct order
 static void	draw(t_fdf *fdf)
 {
 	t_vertex	*v;
 	size_t		i;
 	size_t		j;
+	size_t		idx;
 
+	v = ft_dynarrget(fdf->points.buffer, 0);
 	i = 0;
 	while (i < fdf->points.lines)
 	{
-		j = 0;
-		while (j < fdf->points.line_length)
+		j = fdf->points.line_length;
+		while (j > 0)
 		{
-			v = ft_dynarrget(fdf->points.buffer,
-					i * fdf->points.line_length + j);
+			j--;
+			idx = (i * fdf->points.line_length) + j;
 			if (i + 1 < fdf->points.lines)
-				draw_line(fdf, *v, *(t_vertex *)ft_dynarrget(fdf->points.buffer,
-						(i + 1) * fdf->points.line_length + j));
-			if (j + 1 < fdf->points.line_length)
-				draw_line(fdf, *v, *(t_vertex *)ft_dynarrget(fdf->points.buffer,
-						i * fdf->points.line_length + j + 1));
-			j++;
+				draw_line(fdf, v[idx], v[idx + fdf->points.line_length]);
+			if (j > 0 && j - 1 < fdf->points.line_length)
+				draw_line(fdf, v[idx], v[idx - 1]);
 		}
 		i++;
 	}
