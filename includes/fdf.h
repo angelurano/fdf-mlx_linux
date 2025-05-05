@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 01:25:48 by migugar2          #+#    #+#             */
-/*   Updated: 2025/05/01 18:44:07 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:40:05 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,6 @@
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
-# endif
-
-# ifndef M_PI_2
-#  define M_PI_2 1.57079632679489661923
-# endif
-
-# ifndef M_PI_4
-#  define M_PI_4 0.78539816339744830962
 # endif
 
 typedef struct s_vec2
@@ -160,15 +152,10 @@ typedef struct s_wu_line
 {
 	t_color	c0;
 	t_color	c1;
-	int		is_steep;
 	float	x0s;
 	float	y0s;
 	float	x1s;
 	float	y1s;
-	int		x_pixel1;
-	int		y_pixel1;
-	int		x_pixel2;
-	int		y_pixel2;
 	float	dx;
 	float	dy;
 	float	gradient;
@@ -177,6 +164,11 @@ typedef struct s_wu_line
 	float	xgap2;
 	float	yend;
 	float	yend2;
+	int		is_steep;
+	int		x_pixel1;
+	int		y_pixel1;
+	int		x_pixel2;
+	int		y_pixel2;
 	int		x;
 	int		y;
 	int		max_x;
@@ -186,8 +178,8 @@ typedef struct s_wu_line
 
 void		draw_line(t_fdf *fdf, t_vertex v0, t_vertex v1);
 
-void		clear_framebuffer(t_fdf *fdf);
-void		plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_color color);
+void		clear_image(t_fdf *fdf);
+void		plot_image_pixel(t_fdf *fdf, int x, int y, t_color color);
 
 void		render(t_fdf *fdf);
 

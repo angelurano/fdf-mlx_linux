@@ -6,7 +6,7 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 09:53:07 by migugar2          #+#    #+#             */
-/*   Updated: 2025/04/24 13:47:21 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/03 22:50:59 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,16 @@ static void	draw_first_endpoint(t_fdf *fdf, t_wu_line *line)
 	i2 = frac_part(line->yend) * line->xgap;
 	if (line->is_steep)
 	{
-		plot_framebuffer_pixel(fdf, line->y_pixel1, line->x_pixel1,
+		plot_image_pixel(fdf, line->y_pixel1, line->x_pixel1,
 			set_opacity(c0, i1));
-		plot_framebuffer_pixel(fdf, line->y_pixel1 + 1, line->x_pixel1,
+		plot_image_pixel(fdf, line->y_pixel1 + 1, line->x_pixel1,
 			set_opacity(c0, i2));
 	}
 	else
 	{
-		plot_framebuffer_pixel(fdf, line->x_pixel1, line->y_pixel1,
+		plot_image_pixel(fdf, line->x_pixel1, line->y_pixel1,
 			set_opacity(c0, i1));
-		plot_framebuffer_pixel(fdf, line->x_pixel1, line->y_pixel1 + 1,
+		plot_image_pixel(fdf, line->x_pixel1, line->y_pixel1 + 1,
 			set_opacity(c0, i2));
 	}
 }
@@ -80,16 +80,16 @@ static void	draw_mid_pixels(t_fdf *fdf, t_wu_line *line, t_color c0, t_color c1)
 		interpolated = lerp_color(c0, c1, (line->x - line->x0s) / line->dx);
 		if (line->is_steep)
 		{
-			plot_framebuffer_pixel(fdf, line->y, line->x,
+			plot_image_pixel(fdf, line->y, line->x,
 				set_opacity(interpolated, 1.0f - frac_part(line->intery)));
-			plot_framebuffer_pixel(fdf, line->y + 1, line->x,
+			plot_image_pixel(fdf, line->y + 1, line->x,
 				set_opacity(interpolated, frac_part(line->intery)));
 		}
 		else
 		{
-			plot_framebuffer_pixel(fdf, line->x, line->y,
+			plot_image_pixel(fdf, line->x, line->y,
 				set_opacity(interpolated, 1.0f - frac_part(line->intery)));
-			plot_framebuffer_pixel(fdf, line->x, line->y + 1,
+			plot_image_pixel(fdf, line->x, line->y + 1,
 				set_opacity(interpolated, frac_part(line->intery)));
 		}
 		line->intery += line->gradient;
@@ -112,16 +112,16 @@ static void	draw_last_endpoint(t_fdf *fdf, t_wu_line *line)
 	i2 = frac_part(line->yend2) * line->xgap2;
 	if (line->is_steep)
 	{
-		plot_framebuffer_pixel(fdf, line->y_pixel2, line->x_pixel2,
+		plot_image_pixel(fdf, line->y_pixel2, line->x_pixel2,
 			set_opacity(c1, i1));
-		plot_framebuffer_pixel(fdf, line->y_pixel2 + 1, line->x_pixel2,
+		plot_image_pixel(fdf, line->y_pixel2 + 1, line->x_pixel2,
 			set_opacity(c1, i2));
 	}
 	else
 	{
-		plot_framebuffer_pixel(fdf, line->x_pixel2, line->y_pixel2,
+		plot_image_pixel(fdf, line->x_pixel2, line->y_pixel2,
 			set_opacity(c1, i1));
-		plot_framebuffer_pixel(fdf, line->x_pixel2, line->y_pixel2 + 1,
+		plot_image_pixel(fdf, line->x_pixel2, line->y_pixel2 + 1,
 			set_opacity(c1, i2));
 	}
 }

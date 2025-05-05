@@ -6,13 +6,13 @@
 /*   By: migugar2 <migugar2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/05 12:22:35 by migugar2          #+#    #+#             */
-/*   Updated: 2025/05/03 01:26:42 by migugar2         ###   ########.fr       */
+/*   Updated: 2025/05/03 22:50:16 by migugar2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	clear_framebuffer(t_fdf *fdf)
+void	clear_image(t_fdf *fdf)
 {
 	unsigned int	*pixel;
 	unsigned int	color;
@@ -35,7 +35,7 @@ void	clear_framebuffer(t_fdf *fdf)
 	}
 }
 
-void	plot_framebuffer_pixel(t_fdf *fdf, int x, int y, t_color color)
+void	plot_image_pixel(t_fdf *fdf, int x, int y, t_color color)
 {
 	unsigned int	*pixel;
 	t_color			bg_color;
@@ -76,7 +76,7 @@ static void	draw(t_fdf *fdf)
 
 void	render(t_fdf *fdf)
 {
-	clear_framebuffer(fdf);
+	clear_image(fdf);
 	draw(fdf);
 	mlx_clear_window(fdf->connection, fdf->window);
 	mlx_put_image_to_window(fdf->connection, fdf->window,
